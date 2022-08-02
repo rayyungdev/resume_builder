@@ -106,10 +106,10 @@ class resume_builder:
         print('resume made')
 
 if __name__ == "__main__":
-    job_file = 'experience.csv'
-    skill_file = 'skills.csv'
-    language_file = 'languages.csv'
-    basic_info = 'basic_info.csv'
+    job_file = './data/experience.csv'
+    skill_file = './data/skills.csv'
+    language_file = './data/languages.csv'
+    basic_info = './data/basic_info.csv'
     template = template_1()
     resume = resume_builder(job_file, skill_file, language_file, basic_info)
     key = ['programming']
