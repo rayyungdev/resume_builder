@@ -86,10 +86,10 @@ class template_1(FPDF):
             self.set_font(self.font, 'B', 12)
             #self.set_x(15)
             
-            self.cell(0, 6, skill, align = 'L')
+            self.cell(0, 6, skill, align = 'L', new_x = "END")
             self.set_font(self.font, 'I', 12)
-            w = self.get_string_width(skill)
-            self.set_x(w + 15)
+            #w = self.get_string_width(skill)
+            #self.set_x(w + 12)
             self.multi_cell(0, 6, skills.get(skill), new_x = "LMARGIN", new_y = "NEXT", align = 'L')
         self.ln(2)
         
