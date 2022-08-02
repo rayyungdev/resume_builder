@@ -127,6 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+<<<<<<< HEAD
 
 # custom
 basic_info.csv
@@ -134,3 +135,5 @@ experience.csv
 languages.csv
 skills.csv
 resume.pdf
+=======
+>>>>>>> 9998a168f95ded9bf543dd88a4c0c2ff7af361cd
