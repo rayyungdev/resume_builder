@@ -70,11 +70,18 @@ class resume_builder:
             try:
                 end_date = month[pd.to_datetime(row.end).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.end).dt.year.astype(str).item()
             except: 
-                end_date = "Ongoing"
-            projects[project] = {
-                'date' : start_date + ' - ' + end_date,
-                'detail' : row.detail.item()
-            }
+                end_date = "present"
+            if not self.display_project_skills:
+                projects[project] = {
+                    'date' : start_date + ' - ' + end_date,
+                    'detail' : row.detail.item()
+                }
+            else: 
+                projects[project] = {
+                    'date' : start_date + ' - ' + end_date,
+                    'detail' : row.detail.item(),
+                    'skills': row.skills.item()
+                }
         experience['projects'] = projects
         return experience
                 
@@ -92,7 +99,8 @@ class resume_builder:
             skills[skname] = skill_list
         return skills
     
-    def build_resume(self, template, keys, output, max_experience = 7, max_skills = 4):
+    def build_resume(self, template, keys, output, max_experience = 7, max_skills = 4, display_project_skills = False):
+        self.display_project_skills = display_project_skills
         name = self.basic.name.item()
         education = {
             self.basic.edu_1.item()[0] : self.basic.edu_1.item()[1],
@@ -110,8 +118,16 @@ if __name__ == "__main__":
     skill_file = './data/skills.csv'
     language_file = './data/languages.csv'
     basic_info = './data/basic_info.csv'
-    template = template_1()
+
+    #### Template_basic_1
+    template_1 = template_basic_1()
     resume = resume_builder(job_file, skill_file, language_file, basic_info)
     key = ['programming']
-    fname = 'resume.pdf'
-    resume.build_resume(template, key, fname, max_experience = 6)
+    fname = 'resume_1.pdf'
+    resume.build_resume(template_1, key, fname, max_experience = 6)
+    ####
+
+    template_2 = template_basic_2()
+    resume_2 = resume_builder(job_file, skill_file, language_file, basic_info)
+    fname = 'resume_2.pdf'
+    resume_2.build_resume(template_2, key, fname, max_experience = 6, display_project_skills=True)
