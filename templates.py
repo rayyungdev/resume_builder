@@ -314,7 +314,7 @@ if __name__=="__main__":
         'Resume Builder' : {'date' : 'July 2022 - August 2022', 'detail' : ['Purpose is to create my own resumes based off job intention', 'created a database that is updated with my current history']},
         'Interview Bot' : {'date' : 'July 2022 - Ongoing', 'detail' : ['Purpose is for potential recruiters to interview me', 'Created an interview database that consists of over 100 questions', 'Uses a model for Intent Classification to understand user intention']}
     }
-    resume = template_1()
+    resume = template_basic_1()
     resume.fill_resume(name, address, skills, exp, edu, p_exp)
 
     resume.output('template_1.pdf')
