@@ -7,6 +7,9 @@ Next Priority : Let's making something that will make our PDF
 
 from fpdf import FPDF
 
+header_font_size = 12
+body_font_size = 10.5
+
 class template_basic_1(FPDF):
     '''
         Default Colors: 
@@ -50,7 +53,7 @@ class template_basic_1(FPDF):
         # Title
         self.set_text_color(66, 81, 245)
         self.cell(w, 7, txt = name, align = 'C', new_y = 'NEXT')
-        self.set_font(self.font, 'I', 11)
+        self.set_font(self.font, 'I', 10.5)
         self.ln(0.5)
         w = self.get_string_width(address) + 6
         self.set_x((210 - w) / 2)
@@ -60,14 +63,15 @@ class template_basic_1(FPDF):
         self.cell(w, 5, address, align = 'C', new_y = "NEXT", new_x = "LMARGIN")
         
         ## Divider
-        x = self.get_x()
-        y = self.get_y()
-        self.line(x, y+2, 195, y+2)
-        self.ln(6)
+        # x = self.get_x()
+        # y = self.get_y()
+        # self.line(x, y+2, 195, y+2)
+        # self.ln(2)
         
     def section_header(self, header):
-        self.set_font(self.font, 'B', 16)
+        self.set_font(self.font, 'B', header_font_size)
         # Background color
+        self.ln(1)
         self.set_fill_color(255, 255, 255)
         self.set_text_color(66, 81, 245)
         
@@ -83,15 +87,15 @@ class template_basic_1(FPDF):
         header = 'Skills'
         self.section_header(header)
         for skill in skills:
-            self.set_font(self.font, 'B', 12)
+            self.set_font(self.font, 'B', body_font_size)
             #self.set_x(15)
             
             self.cell(0, 6, skill, align = 'L', new_x = "END")
-            self.set_font(self.font, 'I', 12)
+            self.set_font(self.font, '', body_font_size)
             #w = self.get_string_width(skill)
             #self.set_x(w + 12)
             self.multi_cell(0, 6, skills.get(skill), new_x = "LMARGIN", new_y = "NEXT", align = 'L')
-        self.ln(2)
+        self.ln(1)
         
     def work_exp(self, w_exp):
         header = 'Professional Experience'
@@ -101,18 +105,16 @@ class template_basic_1(FPDF):
             info = w_exp.get(company)
             date_location = info.get('date') + ', ' + info.get('location')
             title = info.get('title')
-            self.set_font(self.font, 'B', 12)
-            
+            self.set_font(self.font, 'B', body_font_size)
             self.cell(0, 6, title, align = 'L', new_y = "NEXT", new_x="LMARGIN")
             self.cell(0, 6, company, align = 'L')
-            self.set_font(self.font, 'I', 12)
+            self.set_font(self.font, 'I', body_font_size)
             self.cell(0, 6, txt = date_location, align = 'R', new_x = "LMARGIN", new_y = "NEXT")
-            self.set_font(self.font, '', 12)
+            self.set_font(self.font, '', body_font_size)
             for detail in info.get('detail'):
                 self.set_x(self.get_x() + 5)
                 self.multi_cell(0, 6, txt = ('\u00b7 '+detail), align = 'L', new_y = "NEXT", new_x = "LMARGIN")
-            
-        self.ln(2)
+        self.ln(1)
 
     def proj_exp(self, p_exp):
         header = 'Relevant Projects'
@@ -120,40 +122,39 @@ class template_basic_1(FPDF):
         for project in p_exp:
             info = p_exp.get(project)
             date = info.get('date')
-            self.set_font(self.font, 'B', 12)
+            self.set_font(self.font, 'B', body_font_size)
             
             self.cell(0, 6, project, align = 'L')
-            self.set_font(self.font, 'I', 12)
+            self.set_font(self.font, 'I', body_font_size)
             self.cell(0, 6, txt = date, align = 'R', new_x = "LMARGIN", new_y = "NEXT")
-            self.set_font(self.font, '', 12)
+            self.set_font(self.font, '', body_font_size)
             for detail in info.get('detail'):
                 self.set_x(self.get_x() + 5)
                 self.multi_cell(0, 6, txt = ('\u00b7 '+detail), align = 'L', new_y = "NEXT", new_x = "LMARGIN")
-        self.ln(2)
+        self.ln(1)
 
     def education(self, education):
         header = 'Education'
         self.section_header(header)
         
         for degree in education:
-            self.set_font(self.font, 'B', 12)
+            self.set_font(self.font, 'B', body_font_size)
             #self.set_x(15)
             self.cell(0, 6, degree, new_x = "LMARGIN", new_y = "NEXT", align = 'L')
-            self.set_font(self.font, '', 12)
+            self.set_font(self.font, '', body_font_size)
             #self.set_x(15)
             self.cell(0, 6, education.get(degree), new_x = "LMARGIN", new_y = "NEXT", align = 'L')
-            self.ln(1.5)
 
-        self.ln(2)
+        self.ln(1)
     
     def fill_resume(self, name, address, skills, w_exp, edu, p_exp = None):
         self.add_page()
         self.head(name, address)
+        self.education(edu)
+        self.skills(skills)
         if p_exp: 
             self.proj_exp(p_exp)
         self.work_exp(w_exp)
-        self.skills(skills)
-        self.education(edu)
 
 class template_basic_2(FPDF):
     '''
@@ -173,7 +174,7 @@ class template_basic_2(FPDF):
 
 
     '''
-    
+
     def head(self, name, address, font = 'Helvetica'):
         self.font = font
         self.set_font(self.font, 'B', 20)
@@ -195,13 +196,14 @@ class template_basic_2(FPDF):
         self.cell(w, 5, address, align = 'C', new_y = "NEXT", new_x = "LMARGIN")
         
         ## Divider
-        x = self.get_x()
-        y = self.get_y()
-        self.line(x, y+2, 195, y+2)
-        self.ln(6)
+        # x = self.get_x()
+        # y = self.get_y()
+        # self.line(x, y+2, 195, y+2)
+        # self.ln(2)
         
     def section_header(self, header):
-        self.set_font(self.font, 'B', 16)
+        self.set_font(self.font, 'B', header_font_size)
+        self.ln(1)
         # Background color
         self.set_fill_color(255, 255, 255)
         self.set_text_color(66, 81, 245)
@@ -218,15 +220,15 @@ class template_basic_2(FPDF):
         header = 'Skills'
         self.section_header(header)
         for skill in skills:
-            self.set_font(self.font, 'B', 12)
+            self.set_font(self.font, 'B', body_font_size)
             #self.set_x(15)
             
             self.cell(0, 6, skill, align = 'L', new_x = "END")
-            self.set_font(self.font, 'I', 12)
+            self.set_font(self.font, '', body_font_size)
             #w = self.get_string_width(skill)
             #self.set_x(w + 12)
             self.multi_cell(0, 6, skills.get(skill), new_x = "LMARGIN", new_y = "NEXT", align = 'L')
-        self.ln(2)
+        self.ln(1)
         
     def work_exp(self, w_exp):
         header = 'Professional Experience'
@@ -234,20 +236,20 @@ class template_basic_2(FPDF):
         
         for company in w_exp:
             info = w_exp.get(company)
-            date_location = info.get('date') + ', ' + info.get('location')
+            date_location = info.get('location') + ', ' + info.get('date') 
             title = info.get('title')
-            self.set_font(self.font, 'B', 12)
+            self.set_font(self.font, 'B', body_font_size)
             
             self.cell(0, 6, title, align = 'L', new_y = "NEXT", new_x="LMARGIN")
             self.cell(0, 6, company, align = 'L')
-            self.set_font(self.font, 'I', 12)
+            self.set_font(self.font, 'I', body_font_size)
             self.cell(0, 6, txt = date_location, align = 'R', new_x = "LMARGIN", new_y = "NEXT")
-            self.set_font(self.font, '', 12)
+            self.set_font(self.font, '', body_font_size)
             for detail in info.get('detail'):
                 self.set_x(self.get_x() + 5)
                 self.multi_cell(0, 6, txt = ('\u00b7 '+detail), align = 'L', new_y = "NEXT", new_x = "LMARGIN")
             
-        self.ln(2)
+        self.ln(1)
 
     def proj_exp(self, p_exp):
         header = 'Relevant Projects'
@@ -256,45 +258,44 @@ class template_basic_2(FPDF):
         for project in p_exp:
             info = p_exp.get(project)
             date = info.get('date')
-            self.set_font(self.font, 'B', 12)
+            self.set_font(self.font, 'B', body_font_size)
 
             self.cell(0, 6, project, align = 'L', new_x = "END") # Project Title
-            self.set_font(self.font, 'I', 10)
+            self.set_font(self.font, 'I', 8.5)
             skills = '(Skills: ' + info.get('skills') + ')'
             self.cell(0, 6, skills, align = 'L')
-            self.set_font(self.font, 'I', 12)
+            self.set_font(self.font, 'I', body_font_size)
             self.cell(0, 6, txt = date, align = 'R', new_x = "LMARGIN", new_y = "NEXT")
-            self.set_font(self.font, '', 12)
+            self.set_font(self.font, '', body_font_size)
 
             for detail in info.get('detail'):
                 self.set_x(self.get_x() + 5)
                 self.multi_cell(0, 6, txt = ('\u00b7 '+detail), align = 'L', new_y = "NEXT", new_x = "LMARGIN")
-        self.ln(2)
+        self.ln(1)
 
     def education(self, education):
         header = 'Education'
         self.section_header(header)
         
         for degree in education:
-            self.set_font(self.font, 'B', 12)
+            self.set_font(self.font, 'B', body_font_size)
             #self.set_x(15)
             self.cell(0, 6, degree, new_x = "LMARGIN", new_y = "NEXT", align = 'L')
-            self.set_font(self.font, '', 12)
+            self.set_font(self.font, '', body_font_size)
             #self.set_x(15)
             self.cell(0, 6, education.get(degree), new_x = "LMARGIN", new_y = "NEXT", align = 'L')
-            self.ln(1.5)
 
-        self.ln(2)
+        self.ln(1)
     
     def fill_resume(self, name, address, skills, w_exp, edu, p_exp = None):
         self.add_page()
         self.head(name, address)
+        self.education(edu)
+        self.skills(skills)
         if p_exp: 
             self.proj_exp(p_exp)
         self.work_exp(w_exp)
-        self.skills(skills)
-        self.education(edu)
-
+        
 if __name__=="__main__":
     name = 'Raymond Yung'
     address = 'Philadelphia, PA, 19121 | 516.469.0726 | Raymond.Yung@drexel.edu | https://rayyungdev.github.io'
