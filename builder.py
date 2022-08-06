@@ -126,7 +126,6 @@ class resume_builder:
 if __name__ == "__main__":
     job_file = './data/experience.csv'
     skill_file = './data/skills.csv'
-    language_file = './data/languages.csv'
     basic_info = './data/basic_info.csv'
 
     #### Template_basic no skills
