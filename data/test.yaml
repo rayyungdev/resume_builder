@@ -1,0 +1,32 @@
+---
+name : Raymond Yung
+education : {
+  'Masters in Electrical Engineering' : 
+    {
+      'school': Drexel University, Philadelphia PA,
+      'completed': 'June 2022',
+      'gpa': 'GPA: 3.68'
+    }, 
+  'Bachelors in Electrical Engineering':
+    {
+      'school': Drexel University, Philadelphia PA,
+      'completed': 'June 2020',
+      'gpa': 'GPA: 3.00'
+    }
+}
+subheader_info : (516)-469-0726 | Raymond.Yung@drexel.edu | rayyungdev.github.io
+experience : {
+  'DialogRPT / NLP with Deep Learning' : {
+    type : P,
+    tags : machine learning, software development, data science, python, pytorch, nlp, programming, technology, 
+    skils : Pytorch, Deep Learning, AWS,
+    start : 3/1/2022,
+    end : 6/1/2022,
+    company : None,
+    location : None, 
+    details : [
+    'Built deep learning models to predict engagingness of dialog responses based on reddit data',
+    'Implemented CNN and LSTM architecture and achieved comparable score with literature',
+    'Set up virtual desktops using AWS']
+  }
+}

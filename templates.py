@@ -86,11 +86,12 @@ class template_basic(FPDF):
             self.set_font(self.font, 'B', self.body_font_size)
             #self.set_x(15)
             
-            self.cell(0, 6, skill, align = 'L', new_x = "END")
+            self.cell(0, 6, skill + ': ', align = 'L', new_x = "END")
             self.set_font(self.font, '', self.body_font_size)
             #w = self.get_string_width(skill)
             #self.set_x(w + 12)
-            self.multi_cell(0, 6, skills.get(skill), new_x = "LMARGIN", new_y = "NEXT", align = 'L')
+            skill_string = ', '.join(skills.get(skill))
+            self.multi_cell(0, 6, skill_string, new_x = "LMARGIN", new_y = "NEXT", align = 'L')
         self.ln(1)
         
     def work_exp(self, w_exp):
@@ -128,7 +129,7 @@ class template_basic(FPDF):
             if info.get('skills'):
                 skills = '(Skills: ' + info.get('skills') + ')'
                 self.cell(0, 6, skills, align = 'L')
-            self.set_font(self.font, 'I', self.body_font_size)
+            self.set_font(self.font, '', self.body_font_size)
             self.cell(0, 6, txt = date, align = 'R', new_x = "LMARGIN", new_y = "NEXT")
             self.set_font(self.font, '', self.body_font_size)
 
@@ -172,25 +173,4 @@ class template_basic(FPDF):
         self.work_exp(w_exp)
         
 if __name__=="__main__":
-    name = 'Raymond Yung'
-    address = 'Philadelphia, PA, 19121 | 516.469.0726 | Raymond.Yung@drexel.edu | https://rayyungdev.github.io'
-    skills = {'Programming Languages:': 'Python, Javascript, Matlab, Powershell, C++', 'Software & Tools:' : 'Git, Powershell, Pytorch'}
-
-    ## Let's assume that work experience & projects are list of lists
-    exp = {
-        'Health Partner Plans' : {'location' : 'Philadelphia, PA', 'title' : 'Privacy and Security Intern', 'date' : 'April 2019 - December 2019', 'detail' : ['Worked with company governance software to manage data access', 'Automated daily reports with Powershell to save manpower', 'Cooperated with IT Staff to promote cybersecurity and role governance within company']}
-    }
-
-    edu = {
-        'Masters of Science in Electrical Engineering' : 'Drexel University, Philadelphia PA, Completed June 2022, GPA: 3.68',
-        'Bachelors of Science in Electrical Engineering' : 'Drexel University, Philadelphia PA, Completed June 2020, GPA: 3.00'
-    }
-
-    p_exp = {
-        'Resume Builder' : {'date' : 'July 2022 - August 2022', 'detail' : ['Purpose is to create my own resumes based off job intention', 'created a database that is updated with my current history']},
-        'Interview Bot' : {'date' : 'July 2022 - Ongoing', 'detail' : ['Purpose is for potential recruiters to interview me', 'Created an interview database that consists of over 100 questions', 'Uses a model for Intent Classification to understand user intention']}
-    }
-    resume = template_basic_1()
-    resume.fill_resume(name, address, skills, exp, edu, p_exp)
-
-    resume.output('template_1.pdf')
+    pass

@@ -1,0 +1,148 @@
+---
+# Basic Info
+name : Raymond Yung
+education : {
+  'Masters of Science in Electrical Engineering' : 
+    {
+      'address': 'Drexel University, Philadelphia PA',
+      'completed': 'Completed June 2022',
+      'GPA': 'GPA: 3.68'
+    }, 
+  'Bachelors of Science in Electrical Engineering':
+    {
+      'address': 'Drexel University, Philadelphia PA',
+      'completed': 'Completed June 2020',
+      'GPA': 'GPA: 3.00'
+    }
+}
+subheader_info : '(516)-469-0726 | Raymond.Yung@drexel.edu | rayyungdev.github.io'
+
+experience : {
+   0 : {
+    type : P,
+    tags : [machine learning, software development, data science, python, pytorch, nlp, programming, technology],
+    title :  'DialogRPT / NLP with Deep Learning',
+    skills : 'Pytorch, Deep Learning, AWS',
+    start : 3/1/2022,
+    end : 6/1/2022,
+    company : None,
+    location : None, 
+    detail : [      
+    'Built deep learning models to predict engagingness of dialog responses based on reddit data',
+    'Implemented CNN and LSTM architecture and achieved comparable score with literature',
+    'Set up virtual desktops using AWS']
+  },
+  1 : {
+    type : J,
+    tags : [IT, security, programming, technology],
+    title: 'Privacy and Security Intern',
+    skills : None,
+    start : 4/1/2019,
+    end : 12/1/2019,
+    company : Health Partner Plans,
+    location : 'Philadelphia, PA', 
+    detail : [     
+      'Managed data access through company governance software',
+      'Automated daily computer activity reports with Powershell to improve efficiency',
+      'Collaborated with IT Staff to promote cybersecurity and role governance within company']
+  },
+  2 : {
+    type : P,
+    tags : [machine learning, software development, data science, python, programming, technology],
+    title : 'Predicting Social Vulnerability' ,
+    skills : 'Python, Machine Learning',
+    start : 3/1/2022,
+    end : 6/1/2022,
+    company : None,
+    location : None, 
+    detail : [
+      'Used binary classification techniques to predict how vulnerable a household is',
+      'Implemented logistic regression and Naive Bayes algorithms from scratch',
+      'Strategized with team to better understand how to preprocess social vulnerability data']
+  },
+  3 : {
+    type : P,
+    tags : [machine learning, software development, matlab, programming, biology, technology, image processing],
+    title : 'Cell Segmentation and Tracking Algorithm',
+    skills : 'MATLAB, Image Processing',
+    start : 9/1/2020,
+    end : 4/1/2021,
+    company : None,
+    location : None, 
+    detail : [
+      'Optimized thresholds for phase contrast algorithm leading to more accurate cell tracking scores',
+      'Worked with large datasets containing cell images', 
+      'Led to competitive submission for the Cell Tracking Challenge',
+      'Used cell tracking and segmentation software created by Dr. Andrew Cohen']
+  },
+  4 : {
+    type : J,
+    tags : [IT, security, technology],
+    title : 'Information Technology',
+    skills : 'Active Directory, Data Management',
+    start : 3/1/2018,
+    end : 9/1/2020,
+    company : Drexel University,
+    location : 'Philadelphia, PA', 
+    detail : [
+      'Assisted users with personable expertise to thoroughly explain technical issues and solutions',
+      'Managed school-wise user permissions using tools like Active Directory',
+      'Authorized data access to users including group emails and servers']
+  },
+  5 : {
+    type : P,
+    tags : [machine learning, software development, python, sklearn, nlp, programming, technology],
+    title : 'Interview Bot',
+    skills : 'Python, scikit-learn, Natural Language Processing',
+    start : 7/1/2022,
+    end : ,
+    company : None,
+    location : None, 
+    detail : [ 
+      'Developed an interactive FAQ bot to respond to commonly asked interview questions',
+      'Built a database that consists of over 100 interview questions',
+      'Created using sci-kit learn and spaCY (natural language processing toolkit)']
+  },
+  6 : {
+    type : P,
+    tags : [programming, web development, technology, javascript, react],
+    title : 'Blog / rayyungdev.github.io',
+    skills : 'React, Gatsby, Web evelopment',
+    start : 7/1/2022,
+    end : ,
+    company : ,
+    location : None, 
+    detail : [ 
+      'Designed and created a personal site from scratch to as a means to learn React and showcase personal projects',
+      'Built using Gatsby as a static site generator that is now hosted on GitHub']
+  },
+  7 : {
+    type : P,
+    tags : [software development, programming, python, pandas],
+    title : 'Resume Builder',
+    skills : 'Python, Object Oriented Programming, Database',
+    start : 7/1/2022,
+    end : ,
+    company : None,
+    location : None, 
+    detail : [ 
+      'Developed a resume building application that can build different resumes that depend on purpose',
+      'Created multiple databases to organize and pull relevant job information',
+      'Utilized Object Oriented Programming to create a data interpreter and a resume template']
+  }
+}
+skills : {
+  'Programming Languages' :[ 
+    Python,
+    Javascript,
+    MATLAB,
+    Powershell,
+    C++],
+    
+  'Technical Skills' :[ 
+    Machine Learning, 
+    NLP,
+    Pattern Recognition,
+    Digital Forensics,
+    Web Development]
+}
