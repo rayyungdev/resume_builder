@@ -107,7 +107,7 @@ experience : {
     type : P,
     tags : [programming, web development, technology, javascript, react],
     title : 'Blog / rayyungdev.github.io',
-    skills : 'React, Gatsby, Web evelopment',
+    skills : 'React, Gatsby, Web Development',
     start : 7/1/2022,
     end : ,
     company : ,
@@ -122,7 +122,7 @@ experience : {
     title : 'Resume Builder',
     skills : 'Python, Object Oriented Programming, Database',
     start : 7/1/2022,
-    end : ,
+    end : 8/1/2022,
     company : None,
     location : None, 
     detail : [ 

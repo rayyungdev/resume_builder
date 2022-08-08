@@ -1,0 +1,58 @@
+---
+# Basic Info
+name : Billy Jean
+education : {
+  'Bachelors of Science in Electrical Engineering':
+    {
+      'address': 'Community Lane, Conneticut Florida',
+      'completed': 'Completed June 2020',
+      'GPA': 'GPA: 3.00'
+    }
+}
+subheader_info : '(555)-555-5555 | BillyJean@Fake.com | BillyJeansPersonalSite.com'
+
+experience : {
+   0 : {
+    type : P,
+    tags : [machine learning, software development, data science, python, pytorch, nlp, programming, technology],
+    title :  'Billy Jeans Personal Project',
+    skills : 'Pytorch, Deep Learning, AWS',
+    start : 3/1/2022,
+    end : 6/1/2022,
+    company : None,
+    location : None, 
+    detail : [      
+    'Can use any amount of details',
+    'Billy Jean Project detail 1',
+    'Billy Jean Project detail 2']
+  },
+  1 : {
+    type : J,
+    tags : [IT, security, programming, technology],
+    title: 'Billy Jeans First Job',
+    skills : None,
+    start : 4/1/2019,
+    end : 12/1/2019,
+    company : Jean Company,
+    location : 'New York, NY', 
+    detail : [     
+      'Specify Job Details Here',
+      'Job Detail 2',
+      'Job Detail 3']
+  }
+}
+skills : {
+  'Programming Languages' :[ 
+    Python,
+    Javascript,
+    MATLAB,
+    Powershell,
+    C++],
+    
+  'Technical Skills' :[ 
+    Machine Learning, 
+    NLP,
+    Pattern Recognition,
+    Digital Forensics,
+    Web Development]
+}
