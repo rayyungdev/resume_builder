@@ -49,15 +49,27 @@ class template_basic(FPDF):
         # Title
         self.set_text_color(66, 81, 245)
         self.cell(w, 7, txt = name, align = 'C', new_y = 'NEXT')
-        self.set_font(self.font, 'I', 11)
-        self.ln(0.5)
-        w = self.get_string_width(address) + 6
-        self.set_x((210 - w) / 2)
+
         
         ## Subsection Font
+
         self.set_text_color(39, 39, 46)
-        self.cell(w, 5, address, align = 'C', new_y = "NEXT", new_x = "LMARGIN")
-        
+        self.ln(0.5)
+        self.set_font(self.font, size = self.body_font_size)
+
+        # if type(address) is str: 
+        #     # w = self.get_string_width(address) + 6
+        #     # self.set_x((210 - w) / 2)
+        #     self.cell(0, 5, txt = address, align = 'C', new_y = "NEXT", new_x = "LMARGIN", markdown=True)
+        if type(address) is list:
+            bullet = ' **\u00b7** '
+            address = bullet.join(address)
+        self.cell(0, 5, txt = address, align = 'C', new_y = "NEXT", new_x = "LMARGIN", markdown=True)
+        # elif type(address) is dict:
+        #     for key in address:
+        #         self.set_font(self.font, 'B', self.body_font_size)
+        #         self.cell(0, )
+        #         print(key)
         ## Divider
         # x = self.get_x()
         # y = self.get_y()
@@ -65,14 +77,14 @@ class template_basic(FPDF):
         # self.ln(2)
         
     def section_header(self, header):
-        self.set_font(self.font, 'B', self.header_font_size)
+        self.set_font(self.font, size = self.header_font_size)
         self.ln(1)
         # Background color
         self.set_fill_color(255, 255, 255)
         self.set_text_color(66, 81, 245)
         
         # Title
-        self.cell(0, 6, header, align = 'L', new_x = "LMARGIN", new_y = "NEXT")
+        self.cell(0, 6, header, align = 'L', new_x = "LMARGIN", new_y = "NEXT", markdown=True)
         x = self.get_x()
         y = self.get_y()
         self.line(x, y, 200, y)
@@ -80,7 +92,7 @@ class template_basic(FPDF):
         self.set_text_color(39, 39, 46)
 
     def skills(self, skills): 
-        header = 'Skills'
+        header = '**Skills**'
         self.section_header(header)
         for skill in skills:
             self.set_font(self.font, 'B', self.body_font_size)
@@ -95,7 +107,7 @@ class template_basic(FPDF):
         self.ln(1)
         
     def work_exp(self, w_exp):
-        header = 'Professional Experience'
+        header = '**Professional Experience**'
         self.section_header(header)
         
         for company in w_exp:
@@ -108,15 +120,15 @@ class template_basic(FPDF):
             self.cell(0, 6, company, align = 'L')
             self.set_font(self.font, 'I', self.body_font_size)
             self.cell(0, 6, txt = date_location, align = 'R', new_x = "LMARGIN", new_y = "NEXT")
-            self.set_font(self.font, '', self.body_font_size)
+            self.set_font(self.font,size= self.body_font_size)
             for detail in info.get('detail'):
                 self.set_x(self.get_x() + 5)
-                self.multi_cell(0, 6, txt = ('\u00b7 '+detail), align = 'L', new_y = "NEXT", new_x = "LMARGIN")
+                self.multi_cell(0, 6, txt = ('\u00b7 '+detail), align = 'L', new_y = "NEXT", new_x = "LMARGIN", markdown=True)
             
         self.ln(1)
 
     def proj_exp(self, p_exp):
-        header = 'Relevant Projects'
+        header = '**Relevant Projects**'
         self.section_header(header)
 
         for project in p_exp:
@@ -140,7 +152,7 @@ class template_basic(FPDF):
         self.ln(1)
 
     def education(self, education):
-        header = 'Education'
+        header = '**Education**'
         self.section_header(header)
         
         for degree in education:

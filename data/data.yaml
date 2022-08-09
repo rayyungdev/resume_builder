@@ -15,8 +15,8 @@ education : {
       'GPA': 'GPA: 3.00'
     }
 }
-subheader_info : '(516)-469-0726 | Raymond.Yung@drexel.edu | rayyungdev.github.io'
-
+# subheader_info : '**Phone: **(516)-469-0726 | **Email: ** Raymond.Yung@drexel.edu | **Blog: **rayyungdev.github.io'
+subheader_info : ['','**Phone: **(516)-469-0726', '**Email: ** Raymond.Yung@drexel.edu', '**Blog: **rayyungdev.github.io']
 experience : {
    0 : {
     type : P,
