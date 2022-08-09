@@ -1,6 +1,9 @@
+# New Update : Accept yaml file inputs
+  - See ./data/templates/sample.yaml or my./data/data.yaml to see how to set up
+
 # resume_builder
   Remember what it was like to go job hunting for the first time? You know how they told you to "tailor your resume to the position"?  
-  Well, this project was meant to do just that! I created this to "simplify" the process. Basically, this requires 4 csvs: 
+  Well, this project was meant to do just that! I created this to "simplify" the process. Basically, this requires 3 csvs: 
   - basic_info.csv: 
     - database that contains your: name, edu_1, edu_2, address
    - experience.csv:  
@@ -8,22 +11,30 @@
    - skills.csv:  
     - contains your skills and how you want to sort them  
       - in my case I have Programming Languages, Software & Skills, and Technical Skills  
-   - languages.csv: 
-    - (not yet implemented) specify the different libraries / technologie per diferent programming languages  
- 
+    # OR 
+    - Have a yaml that follows the same key arguments as shown in ./data/templates/sample.yaml
+
  ## What's in this directory?
   - templates.py 
     - Contains my resume templates  
       - Only has 1 template. Hopefully we'll have more built in the future  
   - builder.py  
     - This is the bulk of the operations where we pull the necessary information from our csvs.  
-    - Currently only works with csvs, but I would like to create another method that uses YAML instead  
+    - bulk of the calculations are done in builder class. 
+
   - main.py
-    - Currently in the works, but I plan to have this run in the terminal. 
+    - Use this to run in terminal
   
  ## How to run:  
- Eventually, you'll be able to run this through main.py, but for now, check out what I'm doing in builder.py.  
- You will need your 4 csvs located in the same directory along with template.py
- Make sure you specify the keys and the filename.  
+ Follow the templates in ./data/template
+  - if using CSV:
+    -requires 3 csvs labeled experience, skills, basic_info
+
  inputs:  
-  - max_experience and max_skills are meant to help you in case you're going over 1 page. 
+ - start by running : `python main.py -i path/to/yaml.yaml or path/to/csv1-3.csv -k [search keys] -t template_type(basic only)`
+
+## Future Updates
+  - Implement Unsupervised Classification Models
+    - I want to improve how I choose which experiences to be put on resumes based off of key search terms, so that search terms with the highest score will appear on the resume. 
+      - Currently looking at the skill2vec model (based off of word2vec), proposed b Duyet Le, follow his repository here:
+        - https://github.com/duyet/skill2vec 

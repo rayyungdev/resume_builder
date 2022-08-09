@@ -7,7 +7,7 @@ import argparse
     Eventual Goal for this file is to run everything to the command line    
 '''
 
-data_yaml = './data/data.yaml'
+default_file = './data/data.yaml'
 
 # template = template_basic()
 # resume = csv_builder(job_csv, skill_csv, basic_csv)
@@ -51,7 +51,7 @@ key = args['key']
 if not fname.endswith('.pdf'):
    fname = fname + '.pdf'
 if input is None:
-   input = [data_yaml]
+   input = [default_file]
 
 if template is None: 
    template = template_basic()
