@@ -118,9 +118,9 @@ experience : {
   },
   7 : {
     type : P,
-    tags : [software development, programming, python, pandas],
+    tags : [software development, programming, python, pandas, yaml],
     title : 'Resume Builder',
-    skills : 'Python, Object Oriented Programming, Database',
+    skills : 'Python, Object Oriented Programming, Database, Yaml',
     start : 7/1/2022,
     end : 8/1/2022,
     company : None,
