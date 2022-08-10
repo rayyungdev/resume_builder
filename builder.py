@@ -23,6 +23,8 @@ class builder:
         experience = dict()
         work = dict() #will get put in experience later        
         count = 1
+        def check_null_date(row_input):
+            return pd.isnull(row_input.item())
         for company in company_list:
             if count > max_list :
                 experience.update({'work': work})
@@ -31,7 +33,10 @@ class builder:
             count += 1
             row = job_lookup[job_lookup.company == company]
             start_date = month[pd.to_datetime(row.start).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.start).dt.year.astype(str).item()
-            end_date = month[pd.to_datetime(row.end).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.end).dt.year.astype(str).item()
+            if not check_null_date(row.end):
+                end_date = month[pd.to_datetime(row.end).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.end).dt.year.astype(str).item()
+            else:
+                end_date = 'present'
             
             work[company] = {
                 'location' : row.location.item(), 
@@ -49,22 +54,36 @@ class builder:
                  break
             count +=1
             row = job_lookup[job_lookup.title == project]
-            start_date = month[pd.to_datetime(row.start).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.start).dt.year.astype(str).item()
-            try:
-                end_date = month[pd.to_datetime(row.end).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.end).dt.year.astype(str).item()
-            except: 
-                end_date = "present"
-            if not display_project_skills:
-                projects[project] = {
-                    'date' : start_date + ' - ' + end_date,
-                    'detail' : row.detail.item()
-                }
+
+            if not check_null_date(row.start):
+                start_date = month[pd.to_datetime(row.start).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.start).dt.year.astype(str).item()
+                if not check_null_date(row.end):
+                    end_date = month[pd.to_datetime(row.end).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.end).dt.year.astype(str).item()
+                else: 
+                    end_date = "present"
+                if not display_project_skills:
+                    projects[project] = {
+                        'date' : start_date + ' - ' + end_date,
+                        'detail' : row.detail.item()
+                    }
+                else: 
+                    projects[project] = {
+                        'date' : start_date + ' - ' + end_date,
+                        'detail' : row.detail.item(),
+                        'skills': row.skills.item()
+                    }
             else: 
-                projects[project] = {
-                    'date' : start_date + ' - ' + end_date,
-                    'detail' : row.detail.item(),
-                    'skills': row.skills.item()
-                }
+                if not display_project_skills:
+                    projects[project] = {
+                        'date' : None,
+                        'detail' : row.detail.item()
+                    }
+                else: 
+                    projects[project] = {
+                        'date' : None,
+                        'detail' : row.detail.item(),
+                        'skills': row.skills.item()
+                    }
         experience['projects'] = projects
         return experience
         
@@ -78,13 +97,13 @@ class builder:
                 self.skills[skill] = skill_set[0:max_list]
         return self.skills
     
-    def build_resume(self, template, keys, output, max_experience = 7, max_skills = 7, display_project_skills = False):
+    def build_resume(self, template, keys, output, max_experience = 7, max_skills = 7, display_project_skills = False, header_font_size = 12, body_font_size = 10.5, title_font_size =20, font = 'Helvetica'):
         name = self.name
         address = self.address
         education = self.education
         experience = self.build_experience(tags = keys, max_list = max_experience, display_project_skills= display_project_skills) 
         skills = self.build_skills(max_list=max_skills)
-        template.fill_resume(name, address, skills, experience['work'], education, experience['projects'])
+        template.fill_resume(name, address, skills, experience['work'], education, experience['projects'], header_font_size = header_font_size, body_font_size = body_font_size, title_font_size = title_font_size, font = font)
         template.output(output)
         print('resume made')
 

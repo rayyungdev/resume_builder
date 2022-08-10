@@ -7,6 +7,7 @@ Next Priority : Let's making something that will make our PDF
 
 from fpdf import FPDF
 
+linespace = 6
 class template_basic(FPDF):
     '''
         Default Colors: 
@@ -84,7 +85,7 @@ class template_basic(FPDF):
         self.set_text_color(66, 81, 245)
         
         # Title
-        self.cell(0, 6, header, align = 'L', new_x = "LMARGIN", new_y = "NEXT", markdown=True)
+        self.cell(0, linespace, header, align = 'L', new_x = "LMARGIN", new_y = "NEXT", markdown=True)
         x = self.get_x()
         y = self.get_y()
         self.line(x, y, 200, y)
@@ -98,12 +99,12 @@ class template_basic(FPDF):
             self.set_font(self.font, 'B', self.body_font_size)
             #self.set_x(15)
             
-            self.cell(0, 6, skill + ': ', align = 'L', new_x = "END")
+            self.cell(0, linespace, skill + ': ', align = 'L', new_x = "END")
             self.set_font(self.font, '', self.body_font_size)
             #w = self.get_string_width(skill)
             #self.set_x(w + 12)
             skill_string = ', '.join(skills.get(skill))
-            self.multi_cell(0, 6, skill_string, new_x = "LMARGIN", new_y = "NEXT", align = 'L')
+            self.multi_cell(0, linespace, skill_string, new_x = "LMARGIN", new_y = "NEXT", align = 'L')
         self.ln(1)
         
     def work_exp(self, w_exp):
@@ -116,15 +117,16 @@ class template_basic(FPDF):
             title = info.get('title')
             self.set_font(self.font, 'B', self.body_font_size)
             
-            self.cell(0, 6, title, align = 'L', new_y = "NEXT", new_x="LMARGIN")
-            self.cell(0, 6, company, align = 'L')
-            self.set_font(self.font, 'I', self.body_font_size)
-            self.cell(0, 6, txt = date_location, align = 'R', new_x = "LMARGIN", new_y = "NEXT")
+            self.cell(0, linespace, title, align = 'L', new_y = "NEXT", new_x="LMARGIN")
+            self.cell(0, linespace-1, company, align = 'L')
+            self.set_font(self.font, size = self.body_font_size)
+            self.cell(0, linespace-1, txt = date_location, align = 'R', new_x = "LMARGIN", new_y = "NEXT", markdown = True)
             self.set_font(self.font,size= self.body_font_size)
             for detail in info.get('detail'):
                 self.set_x(self.get_x() + 5)
-                self.multi_cell(0, 6, txt = ('\u00b7 '+detail), align = 'L', new_y = "NEXT", new_x = "LMARGIN", markdown=True)
-            
+                self.multi_cell(0, linespace, txt = ('\u00b7 '+detail), align = 'L', new_y = "NEXT", new_x = "LMARGIN", markdown=True)
+            self.ln(.5)
+
         self.ln(1)
 
     def proj_exp(self, p_exp):
@@ -135,19 +137,20 @@ class template_basic(FPDF):
             info = p_exp.get(project)
             date = info.get('date')
             self.set_font(self.font, 'B', self.body_font_size)
-
-            self.cell(0, 6, project, align = 'L', new_x = "END") # Project Title
+            if date is None:
+                date = ''
+            self.cell(0, linespace, project, align = 'L', new_x = "END") # Project Title
             self.set_font(self.font, 'I', self.body_font_size-2)
             if info.get('skills'):
                 skills = '(Skills: ' + info.get('skills') + ')'
-                self.cell(0, 6, skills, align = 'L')
-            self.set_font(self.font, '', self.body_font_size)
-            self.cell(0, 6, txt = date, align = 'R', new_x = "LMARGIN", new_y = "NEXT")
-            self.set_font(self.font, '', self.body_font_size)
+                self.cell(0, linespace, skills, align = 'L')
+            self.set_font(self.font, size = self.body_font_size)
+            self.cell(0, linespace, txt = date, align = 'R', new_x = "LMARGIN", new_y = "NEXT", markdown = True)
+            self.set_font(self.font, size = self.body_font_size)
 
             for detail in info.get('detail'):
                 self.set_x(self.get_x() + 5)
-                self.multi_cell(0, 6, txt = ('\u00b7 '+detail), align = 'L', new_y = "NEXT", new_x = "LMARGIN")
+                self.multi_cell(0, linespace, txt = ('\u00b7 '+detail), align = 'L', new_y = "NEXT", new_x = "LMARGIN", markdown=True)
             self.ln(.5)
         self.ln(1)
 
@@ -158,15 +161,15 @@ class template_basic(FPDF):
         for degree in education:
             self.set_font(self.font, 'B', self.body_font_size)
             #self.set_x(15)
-            self.cell(0, 6, degree, new_x = "END", new_y = "NEXT", align = 'L')
+            self.cell(0, linespace, degree, new_x = "END", new_y = "NEXT", align = 'L')
             self.set_font(self.font, '', self.body_font_size)
             #self.set_x(15)
             degree_info = education.get(degree)
             address = degree_info.get('address')
             date = degree_info.get('completed')
             gpa = degree_info.get('GPA')
-            self.cell(0, 6, date + ' | '+ gpa, new_x = "LMARGIN", align = 'R')
-            self.cell(0, 6, address , new_x = "LMARGIN", new_y = "NEXT", align = 'L')
+            self.cell(0, linespace, date + ' | '+ gpa, new_x = "LMARGIN", align = 'R')
+            self.cell(0, linespace, address , new_x = "LMARGIN", new_y = "NEXT", align = 'L')
 
         self.ln(1)
     

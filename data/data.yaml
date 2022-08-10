@@ -16,7 +16,7 @@ education : {
     }
 }
 # subheader_info : '**Phone: **(516)-469-0726 | **Email: ** Raymond.Yung@drexel.edu | **Blog: **rayyungdev.github.io'
-subheader_info : ['','**Phone: **(516)-469-0726', '**Email: ** Raymond.Yung@drexel.edu', '**Blog: **rayyungdev.github.io']
+subheader_info : ['','**Phone:** (516)-469-0726', '**Email:** Raymond.Yung@drexel.edu', '**Blog:** rayyungdev.github.io']
 experience : {
    0 : {
     type : P,
@@ -40,7 +40,7 @@ experience : {
     start : 4/1/2019,
     end : 12/1/2019,
     company : Health Partner Plans,
-    location : 'Philadelphia, PA', 
+    location : '__Philadelphia, PA__', 
     detail : [     
       'Managed data access through company governance software',
       'Automated daily computer activity reports with Powershell to improve efficiency',
@@ -83,7 +83,7 @@ experience : {
     start : 3/1/2018,
     end : 9/1/2020,
     company : Drexel University,
-    location : 'Philadelphia, PA', 
+    location : '__Philadelphia, PA__', 
     detail : [
       'Assisted users with personable expertise to thoroughly explain technical issues and solutions',
       'Managed school-wise user permissions using tools like Active Directory',

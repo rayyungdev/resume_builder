@@ -38,6 +38,9 @@ my_parser.add_argument('--template','-t',action = 'store', type = str, required 
 my_parser.add_argument('--max_experience', '-me', type= int, required = False, help = 'maximum experience, default = 7')
 my_parser.add_argument('--max_skills', '-ms', type =int, required=False, help = 'maximum skills shown in tab, default = 7')
 my_parser.add_argument('--display_project_skills', '-dps', type = Boolean, required=False, help = 'show skills in job section, default = False')
+my_parser.add_argument('--header_font_size', '-hs', type = float, required=False, help = 'set header font size')
+my_parser.add_argument('--body_font_size', '-bs', type = float, required=False, help = 'set body font size')
+my_parser.add_argument('--title_font_size', '-ts', type = float, required=False, help = 'set title font size')
 
 args = vars(my_parser.parse_args())
 input = args['input']
@@ -48,6 +51,10 @@ dps = args['display_project_skills']
 fname = args['fname']
 key = args['key']
 
+header_font_size = args['header_font_size']
+body_font_size = args['body_font_size']
+title_font_size = args['title_font_size']
+
 if not fname.endswith('.pdf'):
    fname = fname + '.pdf'
 if input is None:
@@ -55,6 +62,13 @@ if input is None:
 
 if template is None: 
    template = template_basic()
+
+if header_font_size is None:
+   header_font_size = 12
+if body_font_size is None:
+   body_font_size = 10.5
+if title_font_size is None:
+   title_font_size = 20
 
 if me is None:
    me = 7
@@ -88,4 +102,4 @@ if dps is None:
    dps = False
 
 if resume:
-   resume.build_resume(template, key, fname, max_experience = me, max_skills = ms, display_project_skills=dps)
+   resume.build_resume(template, key, fname, max_experience = me, max_skills = ms, display_project_skills=dps, header_font_size=header_font_size, body_font_size=body_font_size, title_font_size=title_font_size)
