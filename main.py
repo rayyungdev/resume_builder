@@ -32,7 +32,7 @@ default_file = './data/data.yaml'
 '''
 my_parser = argparse.ArgumentParser(description='Resume Generator based off Key')
 my_parser.add_argument('--input','-i', nargs = '*', action = 'store', type = str, required = False, help = 'Input Data')
-my_parser.add_argument('--fname','-f', action = 'store', type = str, required = True, help = 'file name')
+my_parser.add_argument('--output','-o', action = 'store', type = str, required = True, help = 'output')
 my_parser.add_argument('--key','-k', action = 'store', nargs = '+', type = str, required = True, help = 'keys')
 # my_parser.add_argument('--template','-t',action = 'store', type = str, required = False, help ='template type (only basic available)')
 my_parser.add_argument('--max_experience', '-me', type= int, required = False, help = 'maximum experience, default = 7')
@@ -48,7 +48,7 @@ input = args['input']
 me = args['max_experience']
 ms = args['max_skills']
 dps = args['display_project_skills']
-fname = args['fname']
+fname = args['output']
 key = args['key']
 
 header_font_size = args['header_font_size']
