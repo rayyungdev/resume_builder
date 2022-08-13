@@ -1,6 +1,6 @@
 from re import S
 import pandas as pd
-from templates import *
+from .templates import *
 
 month = {
     1 : 'January', 2 : 'February', 3 : 'March', 4 : 'April', 5 : 'May', 6 : 'June', 7 : 'July', 8 : 'August', 9 : 'September', 10 : 'October', 11 : 'November',12 : 'December'    
@@ -8,7 +8,7 @@ month = {
 
 class builder: 
     '''
-        my plan is to make this class inheritable for difference types of inputs. 
+    my plan is to make this class inheritable for difference types of inputs. 
     '''
     def build_experience(self, tags, max_list = 5, display_project_skills = False):
         if type(self.jobs) is dict:
