@@ -1,4 +1,3 @@
-fpdf==1.7.2
+pandas==1.4.3
 fpdf2==2.5.5
-pandas==1.1.5
-PyYAML==6.0
+PyYaml==6.0
