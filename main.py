@@ -1,6 +1,6 @@
 from xmlrpc.client import Boolean
-from builder import *
-from templates import *
+from resume_builder.builder import *
+from resume_builder.templates import *
 import argparse
 
 '''

@@ -1,0 +1,81 @@
+---
+name: Anshul Kharbanda
+subheader_info: "(508) 314-2399 | akanshul97@gmail.com | andydevs.com"
+education: {
+  'Bachelors of Science in Computer Engineering': {
+    'address': 'Drexel University, Philadelphia, Pensyllvania',
+    'completed': 'Completed June 2020',
+    'GPA': 'GPA: 3.20'
+  }
+}
+experience: {
+  0: {
+    type: J,
+    tags: ['javascript', 'testing', 'e2e', 'end to end', 'cypress', 'hybrid cloud', 'cloud'],
+    title: 'Software Engineer',
+    skills: 'JavaScript, Cypress, Hybrid Cloud',
+    start: 6/6/2022,
+    end: ,
+    company: 'Hewlett Packard Enterprise',
+    location: 'Andover, MA',
+    detail: [
+      'Developed automated end-to-end testing of hybrid cloud application',
+      'Worked with Cypress automated testing framework'
+    ]
+  },
+  1: {
+    type: J,
+    tags: ['jenkins', 'c++', 'docker', 'security clearence'],
+    title: 'Software Engineer I',
+    skills: 'Docker, C++, Security Clearence',
+    start: 11/30/2020,
+    end: 6/2/2022,
+    company: 'Raytheon Missiles and Defense',
+    location: 'Woburn, MA',
+    detail: [
+      'Developed build pipelines for containerized applications which are orchestrated on a Kubernetes cluster',
+      'Worked in a Scrum Team, coordinated with Jira and Confluence',
+      'Worked with Jenkins, Kubernetes, OpenShift, Artifactory',
+      'Developed and demoed a plugin for SIMDIS for potential use within projects'
+    ]
+  }
+}
+skills: {
+  'Programming Languages': [
+    Python,
+    JavaScript,
+    'C/C++',
+    MATLAB,
+    Java
+  ],
+  'Web Design': [
+    'Node.js',
+    'Express',
+    'jQuery',
+    'React',
+    'Vue.js',
+    'SCSS'
+  ],
+  'Cloud Tech': [
+    'Docker',
+    'Jenkins',
+    'Netlify',
+    'Linode',
+    'Heroku'
+  ],
+  'Agile': [
+    'Git',
+    'GitHub',
+    'Jira',
+    'Slack',
+    'Mattermost',
+    'Teams'
+  ],
+  'Hardware/Systems': [
+    'Arduino',
+    'Linux'
+  ],
+  'IT': [
+    'CompTIA A+ (Renewed 2021)'
+  ]
+}
