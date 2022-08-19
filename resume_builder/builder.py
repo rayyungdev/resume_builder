@@ -1,6 +1,7 @@
 from re import S
 import pandas as pd
 from .templates import *
+import logging
 
 month = {
     1 : 'January', 2 : 'February', 3 : 'March', 4 : 'April', 5 : 'May', 6 : 'June', 7 : 'July', 8 : 'August', 9 : 'September', 10 : 'October', 11 : 'November',12 : 'December'    
@@ -11,14 +12,20 @@ class builder:
     my plan is to make this class inheritable for difference types of inputs. 
     '''
     def build_experience(self, tags, max_list = 5, display_project_skills = False):
+        logging.info('Build experience')
+        logging.debug('Create job lookup as dataframe')
         if type(self.jobs) is dict:
             self.jobs = pd.DataFrame.from_dict(self.jobs, orient='index' )
         self.jobs['start'] = pd.to_datetime(self.jobs ['start'])
         self.jobs ['end'] = pd.to_datetime(self.jobs['end'])
         self.jobs  = self.jobs.sort_values('start', ascending = False)
         self.jobs['type'] = self.jobs['type'].apply(lambda x: x.upper())
+        logging.debug('\n%s', self.jobs)
+        logging.debug('Filter for tags')
         job_lookup = self.jobs[self.jobs.tags.apply(lambda x: any(k in x for k in tags))]
+        logging.debug('\n%s', job_lookup)
 
+        logging.debug('Set work experience')
         company_list = job_lookup[job_lookup.type == 'J'].company.to_list()
         experience = dict()
         work = dict() #will get put in experience later        
@@ -27,7 +34,9 @@ class builder:
             return pd.isnull(row_input.item())
         for company in company_list:
             if count > max_list :
+                logging.warning('Max limit reached!')
                 experience.update({'work': work})
+                logging.warning(experience)
                 return experience
             
             count += 1
@@ -49,6 +58,7 @@ class builder:
         projects = dict() #will get put in experience later
         project_list = job_lookup[job_lookup.type == 'P'].title.to_list()
 
+        logging.debug('Set project experience')
         for project in project_list:
             if count > max_list : 
                  break
@@ -85,16 +95,18 @@ class builder:
                         'skills': row.skills.item()
                     }
         experience['projects'] = projects
+        logging.info(experience)
         return experience
         
-
     def build_skills(self, max_list = 5):
+        logging.info('Build skills')
         for skill in self.skills:
             skill_set = self.skills[skill]
             if len(skill_set) < max_list:
                 continue
             else: 
                 self.skills[skill] = skill_set[0:max_list]
+        logging.info(self.skills)
         return self.skills
     
     def build_resume(self, template, keys, output, max_experience = 7, max_skills = 7, display_project_skills = False, header_font_size = 12, body_font_size = 10.5, title_font_size =20, font = 'Helvetica'):
@@ -103,9 +115,10 @@ class builder:
         education = self.education
         experience = self.build_experience(tags = keys, max_list = max_experience, display_project_skills= display_project_skills) 
         skills = self.build_skills(max_list=max_skills)
+        logging.info('Fill template')
         template.fill_resume(name, address, skills, experience['work'], education, experience['projects'], header_font_size = header_font_size, body_font_size = body_font_size, title_font_size = title_font_size, font = font)
         template.output(output)
-        print('resume made')
+        logging.info('Resume made')
 
 
 class csv_builder(builder):
@@ -141,6 +154,31 @@ class csv_builder(builder):
         for i in self.skills:
             self.skills[i] = self.skills[i][0]
         self.name = basic.name.item()
+        logging.info('Resume Processed')
+        logging.info('  name: %s', self.name)
+        logging.info('  subheader_info: %s', self.address)
+        logging.info('  skills:')
+        for category, items in self.skills.items():
+            logging.info('    %s: %s', category, items)
+        logging.info('  education:')
+        for title, detail in self.education.items():
+            logging.info('    %s', title)
+            logging.info('      address: %s', detail['address'])
+            logging.info('      completed: %s', detail['completed'])
+            logging.info('      GPA: %s', detail['GPA'])
+        logging.info('  jobs:')
+        for job in self.jobs.values():
+            logging.info('    - type:     %s', job['type'])
+            logging.info('      tags:     %s', job['tags'])
+            logging.info('      title:    %s', job['title'])
+            logging.info('      skills:   %s', job['skills'])
+            logging.info('      start:    %s', job['start'])
+            logging.info('      end:      %s', job['end'])
+            logging.info('      company:  %s', job['company'])
+            logging.info('      location: %s', job['location'])
+            logging.info('      details:')
+            for detail in job['detail']:
+                logging.info('        - %s', detail)
 
 
 import yaml
@@ -154,6 +192,31 @@ class yaml_builder(builder):
         self.name = self.data['name']
         self.address = self.data['subheader_info']
         self.education = self.data['education']
+        logging.info('Resume Processed')
+        logging.info('  name: %s', self.name)
+        logging.info('  subheader_info: %s', self.address)
+        logging.info('  skills:')
+        for category, items in self.skills.items():
+            logging.info('    %s: %s', category, items)
+        logging.info('  education:')
+        for title, detail in self.education.items():
+            logging.info('    %s', title)
+            logging.info('      address: %s', detail['address'])
+            logging.info('      completed: %s', detail['completed'])
+            logging.info('      GPA: %s', detail['GPA'])
+        logging.info('  jobs:')
+        for job in self.jobs.values():
+            logging.info('    - type:     %s', job['type'])
+            logging.info('      tags:     %s', job['tags'])
+            logging.info('      title:    %s', job['title'])
+            logging.info('      skills:   %s', job['skills'])
+            logging.info('      start:    %s', job['start'])
+            logging.info('      end:      %s', job['end'])
+            logging.info('      company:  %s', job['company'])
+            logging.info('      location: %s', job['location'])
+            logging.info('      details:')
+            for detail in job['detail']:
+                logging.info('        - %s', detail)
 
 if __name__ == "__main__":
     fname = './data/data.yaml'

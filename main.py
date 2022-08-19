@@ -18,7 +18,7 @@ import logging
 import sys
 
 # Set log level
-logging.basicConfig(encoding='utf-8', level=logging.INFO)
+logging.basicConfig(encoding='utf-8', level=logging.DEBUG)
 
 # Argument parser
 my_parser = argparse.ArgumentParser(description='Resume Generator based off Key')
