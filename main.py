@@ -14,7 +14,13 @@ from xmlrpc.client import Boolean
 from resume_builder.builder import *
 from resume_builder.templates import *
 import argparse
+import logging
+import sys
 
+# Set log level
+logging.basicConfig(encoding='utf-8', level=logging.INFO)
+
+# Argument parser
 my_parser = argparse.ArgumentParser(description='Resume Generator based off Key')
 my_parser.add_argument('--input', '-i', nargs='*', action='store', type=str, required=False, 
                         default='./data/data.yaml', help='Input data file(s), either CSV files or a YAML file')
@@ -27,6 +33,7 @@ my_parser.add_argument('--header_font_size', '-hs', type=float, required=False, 
 my_parser.add_argument('--body_font_size', '-bs', type=float, required=False, default=10.5, help='Set body font size')
 my_parser.add_argument('--title_font_size', '-ts', type=float, required=False, default=20, help='Set title font size')
 
+# Parsed args
 args = vars(my_parser.parse_args())
 template = template_basic()
 input = args['input']
@@ -39,16 +46,31 @@ header_font_size = args['header_font_size']
 body_font_size = args['body_font_size']
 title_font_size = args['title_font_size']
 
+# Log input variables
+logging.info('Input file(s): %s', input)
+logging.info('Max experience: %s', me)
+logging.info('Max skills: %s', ms)
+logging.info('Display project skills: %s', dps)
+logging.info('Output file: %s', fname)
+logging.info('Skill keys: %s', key)
+logging.info('Header font size: %s', header_font_size)
+logging.info('Body font size: %s', body_font_size)
+logging.info('Title font size: %s', title_font_size)
+
+# Append default extension
 if not fname.endswith('.pdf'):
    fname = fname + '.pdf'
+   logging.debug('Updated output filename with ext: %s', fname)
 
-resume = False
+# Create resume
+resume = None
 if len(input) == 1:
    input = input[0]
    if input.endswith('.yaml'):
       resume = yaml_builder(input)
    else: 
-      print('invalid argument' + input)
+      logging.error('Expecting a .yaml file, got %s', input)
+      sys.exit(1)
 else:
    for file in input:
       check = 0
@@ -59,16 +81,13 @@ else:
       elif 'skills.csv' in file:
          skills_csv = file 
       else:
-         print('Invalid Argument : ', file)
-         check +=1
-   if check == 0:
-      resume = csv_builder(job_csv, skills_csv, basic_csv)
-
-if resume:
-   resume.build_resume(template, key, fname, 
-                        max_experience=me, 
-                        max_skills=ms, 
-                        display_project_skills=dps, 
-                        header_font_size=header_font_size, 
-                        body_font_size=body_font_size, 
-                        title_font_size=title_font_size)
+         logging.error('Expecting either basic_info.csv, experience.csv, or skills.csv, got %s', file)
+         sys.exit(1)
+   resume = csv_builder(job_csv, skills_csv, basic_csv)
+resume.build_resume(template, key, fname,
+   max_experience=me, 
+   max_skills=ms, 
+   display_project_skills=dps, 
+   header_font_size=header_font_size, 
+   body_font_size=body_font_size, 
+   title_font_size=title_font_size)
