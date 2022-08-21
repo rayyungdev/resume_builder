@@ -92,7 +92,7 @@ class builder:
         logger.debug('Set project experience')
         for project in project_list:
             if count > max_list : 
-                 break
+                break
             count +=1
             row = job_lookup[job_lookup.title == project]
             if not check_null_date(row.start):
@@ -216,12 +216,3 @@ def builder_from_yaml(fname):
     address = data['subheader_info']
     education = data['education']
     return builder(name, address, education, skills, jobs)
-
-
-if __name__ == "__main__":
-    fname = './data/data.yaml'
-    test = builder_from_yaml(fname)
-    template = template_basic()
-    keys = ['programming']
-    output = 'test.pdf'
-    test.build_resume(template, keys = keys, output = output, display_project_skills=True)
