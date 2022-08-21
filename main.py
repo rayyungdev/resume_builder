@@ -70,7 +70,7 @@ resume = None
 if len(input) == 1:
    input = input[0]
    if input.endswith('.yaml'):
-      resume = yaml_builder(input)
+      resume = builder_from_yaml(input)
    else: 
       logger.error('Expecting a .yaml file, got %s', input)
       sys.exit(1)
@@ -86,7 +86,7 @@ else:
       else:
          logger.error('Expecting either basic_info.csv, experience.csv, or skills.csv, got %s', file)
          sys.exit(1)
-   resume = csv_builder(job_csv, skills_csv, basic_csv)
+   resume = builder_from_csv(job_csv, skills_csv, basic_csv)
 resume.build_resume(template, key, fname,
    max_experience=me, 
    max_skills=ms, 
