@@ -17,9 +17,6 @@ import argparse
 import logging
 import sys
 
-# Set log level
-logging.basicConfig(encoding='utf-8', level=logging.DEBUG)
-
 # Argument parser
 my_parser = argparse.ArgumentParser(description='Resume Generator based off Key')
 my_parser.add_argument('--input', '-i', nargs='*', action='store', type=str, required=False, 
@@ -32,6 +29,7 @@ my_parser.add_argument('--display_project_skills', '-dps', type=Boolean, require
 my_parser.add_argument('--header_font_size', '-hs', type=float, required=False, default=12, help='Set header font size')
 my_parser.add_argument('--body_font_size', '-bs', type=float, required=False, default=10.5, help='Set body font size')
 my_parser.add_argument('--title_font_size', '-ts', type=float, required=False, default=20, help='Set title font size')
+my_parser.add_argument('--debug', '-d', action='store_true', help='Print debug logging')
 
 # Parsed args
 args = vars(my_parser.parse_args())
@@ -46,21 +44,26 @@ header_font_size = args['header_font_size']
 body_font_size = args['body_font_size']
 title_font_size = args['title_font_size']
 
+# Set log level
+logging.basicConfig(encoding='utf-8', 
+   level=logging.DEBUG if args['debug'] else logging.INFO)
+logger = logging.getLogger('main')
+
 # Log input variables
-logging.info('Input file(s): %s', input)
-logging.info('Max experience: %s', me)
-logging.info('Max skills: %s', ms)
-logging.info('Display project skills: %s', dps)
-logging.info('Output file: %s', fname)
-logging.info('Skill keys: %s', key)
-logging.info('Header font size: %s', header_font_size)
-logging.info('Body font size: %s', body_font_size)
-logging.info('Title font size: %s', title_font_size)
+logger.info('Input file(s): %s', input)
+logger.info('Max experience: %s', me)
+logger.info('Max skills: %s', ms)
+logger.info('Display project skills: %s', dps)
+logger.info('Output file: %s', fname)
+logger.info('Skill keys: %s', key)
+logger.info('Header font size: %s', header_font_size)
+logger.info('Body font size: %s', body_font_size)
+logger.info('Title font size: %s', title_font_size)
 
 # Append default extension
 if not fname.endswith('.pdf'):
    fname = fname + '.pdf'
-   logging.debug('Updated output filename with ext: %s', fname)
+   logger.debug('Updated output filename with ext: %s', fname)
 
 # Create resume
 resume = None
@@ -69,7 +72,7 @@ if len(input) == 1:
    if input.endswith('.yaml'):
       resume = yaml_builder(input)
    else: 
-      logging.error('Expecting a .yaml file, got %s', input)
+      logger.error('Expecting a .yaml file, got %s', input)
       sys.exit(1)
 else:
    for file in input:
@@ -81,7 +84,7 @@ else:
       elif 'skills.csv' in file:
          skills_csv = file 
       else:
-         logging.error('Expecting either basic_info.csv, experience.csv, or skills.csv, got %s', file)
+         logger.error('Expecting either basic_info.csv, experience.csv, or skills.csv, got %s', file)
          sys.exit(1)
    resume = csv_builder(job_csv, skills_csv, basic_csv)
 resume.build_resume(template, key, fname,
