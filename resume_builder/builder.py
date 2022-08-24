@@ -33,38 +33,22 @@ class builder:
             logger.info('      address: %s', detail['address'])
             logger.info('      completed: %s', detail['completed'])
             logger.info('      GPA: %s', detail['GPA'])
-        logger.info('  jobs:')
-        for job in self.jobs.values():
-            logger.info('    - type:     %s', job['type'])
-            logger.info('      tags:     %s', job['tags'])
-            logger.info('      title:    %s', job['title'])
-            logger.info('      skills:   %s', job['skills'])
-            logger.info('      start:    %s', job['start'])
-            logger.info('      end:      %s', job['end'])
-            logger.info('      company:  %s', job['company'])
-            logger.info('      location: %s', job['location'])
-            logger.info('      details:')
-            for detail in job['detail']:
-                logger.info('        - %s', detail)
+        logger.info('  jobs:\n%s', self.jobs)
 
     def build_experience(self, tags, max_list = 5, display_project_skills = False):
         logger.info('Build experience')
-        logger.debug('Create job lookup as dataframe')
-        if type(self.jobs) is dict:
-            self.jobs = pd.DataFrame.from_dict(self.jobs, orient='index' )
-        self.jobs['start'] = pd.to_datetime(self.jobs ['start'])
-        self.jobs['end'] = pd.to_datetime(self.jobs['end'])
-        self.jobs = self.jobs.sort_values('start', ascending = False)
-        self.jobs['type'] = self.jobs['type'].apply(lambda x: x.upper())
-        logger.debug('\n%s', self.jobs)
         logger.debug('Filter for tags')
         job_lookup = self.jobs[self.jobs.tags.apply(lambda x: any(k in x for k in tags))]
-        logger.debug('\n%s', job_lookup)
-        logger.debug('Set work experience')
-        company_list = job_lookup[job_lookup.type == 'J'].company.to_list()
+        logger.debug('After filtered tags: \n%s', job_lookup)
+ 
+        # Holders for experience and count
         experience = dict()
-        work = dict() #will get put in experience later        
         count = 1
+
+        # Get work experiences up to max_list. If work is > max_list, exit early
+        company_list = job_lookup[job_lookup.type == 'J'].company.to_list()
+        logger.debug('Set work experience')
+        work = dict() #will get put in experience later        
         def check_null_date(row_input):
             return pd.isnull(row_input.item())
         for company in company_list:
@@ -87,8 +71,10 @@ class builder:
                 'detail' : row.detail.item()
             }
         experience['work'] = work
-        projects = dict() #will get put in experience later
+
+        # Add project experience if work < max_list
         project_list = job_lookup[job_lookup.type == 'P'].title.to_list()
+        projects = dict() #will get put in experience later
         logger.debug('Set project experience')
         for project in project_list:
             if count > max_list : 
@@ -125,6 +111,8 @@ class builder:
                         'skills': row.skills.item()
                     }
         experience['projects'] = projects
+
+        # Return experience
         logger.info(experience)
         return experience
         
@@ -178,6 +166,10 @@ def builder_from_csv(fjobs, fskills, basic_info):
     jobs = pd.read_csv(fjobs)
     jobs.tags = jobs.tags.apply(lambda x: x.split(', '))
     jobs.detail = jobs.detail.apply(lambda x: x.split(', '))
+    jobs['start'] = pd.to_datetime(jobs['start'])
+    jobs['end'] = pd.to_datetime(jobs['end'])
+    jobs = jobs.sort_values('start', ascending = False)
+    jobs['type'] = jobs['type'].apply(lambda x: x.upper())
     basic = pd.read_csv(basic_info)
     basic.edu_1 = basic.edu_1.apply(lambda x:str(x).split('/ '))
     basic.edu_2 = basic.edu_2.apply(lambda x:str(x).split('/ '))
@@ -210,7 +202,11 @@ def builder_from_csv(fjobs, fskills, basic_info):
 def builder_from_yaml(fname):
     with open (fname, 'r') as f:
         data = yaml.safe_load(f)
-    jobs = data['experience']
+    jobs = pd.DataFrame.from_dict(data['experience'], orient='index')
+    jobs['start'] = pd.to_datetime(jobs['start'])
+    jobs['end'] = pd.to_datetime(jobs['end'])
+    jobs = jobs.sort_values('start', ascending = False)
+    jobs['type'] = jobs['type'].apply(lambda x: x.upper())
     skills = data['skills']
     name = data['name']
     address = data['subheader_info']
