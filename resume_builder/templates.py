@@ -7,7 +7,7 @@ Next Priority : Let's making something that will make our PDF
 
 from fpdf import FPDF
 
-linespace = 6
+linespace = 5.2
 class template_basic(FPDF):
     '''
         Default Colors: 

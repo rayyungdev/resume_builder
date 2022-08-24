@@ -93,7 +93,7 @@ experience : {
     type : P,
     tags : [machine learning, software development, python, sklearn, nlp, programming, technology],
     title : 'Interview Bot',
-    skills : 'Python, scikit-learn, Natural Language Processing',
+    skills : 'Python, scikit-learn, Natural Language Processing, React, Flask',
     start : 7/1/2022,
     end : ,
     company : None,
@@ -101,7 +101,8 @@ experience : {
     detail : [ 
       'Developed an interactive FAQ bot to respond to commonly asked interview questions',
       'Built a database that consists of over 100 interview questions',
-      'Created using sci-kit learn and spaCY (natural language processing toolkit)']
+      'Created using sci-kit learn and spaCY (natural language processing toolkit)',
+      'Created different implementations using Discord and React']
   },
   6 : {
     type : P,

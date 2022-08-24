@@ -17,7 +17,7 @@ import argparse
 
 my_parser = argparse.ArgumentParser(description='Resume Generator based off Key')
 my_parser.add_argument('--input', '-i', nargs='*', action='store', type=str, required=False, 
-                        default='./data/data.yaml', help='Input data file(s), either CSV files or a YAML file')
+                        default=['./data/data.yaml'], help='Input data file(s), either CSV files or a YAML file')
 my_parser.add_argument('--fname', '-f', action='store', type=str, required=True, help='Output file name')
 my_parser.add_argument('--key', '-k', action='store', nargs='+', type=str, required=True, help='Skill keys to filter for')
 my_parser.add_argument('--max_experience', '-me', type= int, required=False, default=7, help='Maximum experience')
