@@ -1,13 +1,7 @@
-from re import S
-from tabnanny import process_tokens
 import pandas as pd
 from .templates import *
 import logging
 import yaml
-
-month = {
-    1 : 'January', 2 : 'February', 3 : 'March', 4 : 'April', 5 : 'May', 6 : 'June', 7 : 'July', 8 : 'August', 9 : 'September', 10 : 'October', 11 : 'November',12 : 'December'    
-}
 
 # Get logger
 logger = logging.getLogger('builder')
@@ -68,15 +62,10 @@ class builder:
         
     def build_skills(self, max_list = 5):
         logger.info('Build skills')
-        for skill in self.skills:
-            skill_set = self.skills[skill]
-            if len(skill_set) < max_list:
-                continue
-            else: 
-                self.skills[skill] = skill_set[0:max_list]
-        logger.info('Skillset: %s', self.skills)
-        return self.skills
-    
+        trunc_skills = { group:skills[:max_list] for group, skills, in self.skills.items() }
+        logger.info('Truncated skills: %s', trunc_skills)
+        return trunc_skills
+ 
     def build_resume(self,
             template,
             keys,
