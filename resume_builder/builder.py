@@ -107,6 +107,21 @@ class builder:
         return start_str + ' - ' + end_str
 
 
+def builder_from_yaml(fname):
+    with open (fname, 'r') as f:
+        data = yaml.safe_load(f)
+    skills = data['skills']
+    name = data['name']
+    address = data['subheader_info']
+    education = data['education']
+    jobs = pd.DataFrame.from_records(data['experience'])
+    jobs['start'] = pd.to_datetime(jobs['start'])
+    jobs['end'] = pd.to_datetime(jobs['end'])
+    jobs['type'] = jobs['type'].str.upper()
+    jobs = jobs.sort_values('start', ascending=False)
+    return builder(name, address, education, skills, jobs)
+
+
 def builder_from_csv(fjobs, fskills, basic_info):
     jobs = pd.read_csv(fjobs)
     jobs.tags = jobs.tags.apply(lambda x: x.split(', '))
@@ -141,19 +156,4 @@ def builder_from_csv(fjobs, fskills, basic_info):
     for i in skills:
         skills[i] = skills[i][0]
     name = basic.name.item()
-    return builder(name, address, education, skills, jobs)
-
-
-def builder_from_yaml(fname):
-    with open (fname, 'r') as f:
-        data = yaml.safe_load(f)
-    jobs = pd.DataFrame.from_dict(data['experience'], orient='index')
-    jobs['start'] = pd.to_datetime(jobs['start'])
-    jobs['end'] = pd.to_datetime(jobs['end'])
-    jobs = jobs.sort_values('start', ascending = False)
-    jobs['type'] = jobs['type'].apply(lambda x: x.upper())
-    skills = data['skills']
-    name = data['name']
-    address = data['subheader_info']
-    education = data['education']
     return builder(name, address, education, skills, jobs)
