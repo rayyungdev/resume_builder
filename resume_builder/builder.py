@@ -1,4 +1,5 @@
 from re import S
+from tabnanny import process_tokens
 import pandas as pd
 from .templates import *
 import logging
@@ -37,83 +38,32 @@ class builder:
 
     def build_experience(self, tags, max_list = 5, display_project_skills = False):
         logger.info('Build experience')
-        logger.debug('Filter for tags')
-        job_lookup = self.jobs[self.jobs.tags.apply(lambda x: any(k in x for k in tags))]
-        logger.debug('After filtered tags: \n%s', job_lookup)
+        filtered_jobs = self.jobs[self.jobs.tags.apply(lambda x: any(k in x for k in tags))]
+        logger.debug('After filtered tags: \n%s', filtered_jobs)
  
-        # Holders for experience and count
-        experience = dict()
-        count = 1
+        # Holders for work and project experience
+        experience = { 'work': {}, 'projects': {} }
 
-        # Get work experiences up to max_list. If work is > max_list, exit early
-        company_list = job_lookup[job_lookup.type == 'J'].company.to_list()
-        logger.debug('Set work experience')
-        work = dict() #will get put in experience later        
-        def check_null_date(row_input):
-            return pd.isnull(row_input.item())
-        for company in company_list:
-            if count > max_list :
-                logger.warning('Max limit reached!')
-                experience.update({'work': work})
-                logger.warning(experience)
-                return experience
-            count += 1
-            row = job_lookup[job_lookup.company == company]
-            start_date = month[pd.to_datetime(row.start).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.start).dt.year.astype(str).item()
-            if not check_null_date(row.end):
-                end_date = month[pd.to_datetime(row.end).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.end).dt.year.astype(str).item()
-            else:
-                end_date = 'present'
-            work[company] = {
-                'location' : row.location.item(), 
-                'title' : row.title.item(), 
-                'date' : start_date + ' - ' + end_date,
-                'detail' : row.detail.item()
-            }
-        experience['work'] = work
+        # Get work experiences up to max_list
+        work_items = filtered_jobs[filtered_jobs.type == 'J'].head(max_list)
+        work_items['date'] = self._format_experience_date_ranges(work_items)
+        work_items = work_items[['company', 'title', 'location', 'date', 'detail']]
+        logger.debug('Work experience items: \n%s', work_items)
+        experience['work'] = work_items.set_index('company').to_dict('index')
 
-        # Add project experience if work < max_list
-        project_list = job_lookup[job_lookup.type == 'P'].title.to_list()
-        projects = dict() #will get put in experience later
-        logger.debug('Set project experience')
-        for project in project_list:
-            if count > max_list : 
-                break
-            count +=1
-            row = job_lookup[job_lookup.title == project]
-            if not check_null_date(row.start):
-                start_date = month[pd.to_datetime(row.start).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.start).dt.year.astype(str).item()
-                if not check_null_date(row.end):
-                    end_date = month[pd.to_datetime(row.end).dt.month.astype(int).item()] + ' ' + pd.to_datetime(row.end).dt.year.astype(str).item()
-                else: 
-                    end_date = "present"
-                if not display_project_skills:
-                    projects[project] = {
-                        'date' : start_date + ' - ' + end_date,
-                        'detail' : row.detail.item()
-                    }
-                else: 
-                    projects[project] = {
-                        'date' : start_date + ' - ' + end_date,
-                        'detail' : row.detail.item(),
-                        'skills': row.skills.item()
-                    }
-            else: 
-                if not display_project_skills:
-                    projects[project] = {
-                        'date' : None,
-                        'detail' : row.detail.item()
-                    }
-                else: 
-                    projects[project] = {
-                        'date' : None,
-                        'detail' : row.detail.item(),
-                        'skills': row.skills.item()
-                    }
-        experience['projects'] = projects
+        # Add project experience if no. work items < max_list
+        if len(work_items) < max_list:
+            project_items = filtered_jobs[filtered_jobs.type == 'P']
+            project_items = project_items.head(max_list - len(work_items))
+            project_items['date'] = self._format_experience_date_ranges(project_items)
+            project_items = project_items[['title', 'date', 'skills', 'detail']]
+            if not display_project_skills:
+                project_items = project_items.drop(columns=['skills']) # Drop skills column if we're not displaying it
+            logger.debug('Project experience items: \n%s', project_items)
+            experience['projects'] = project_items.set_index('title').to_dict('index')
 
         # Return experience
-        logger.info(experience)
+        logger.info('Experience Dict: %s', experience)
         return experience
         
     def build_skills(self, max_list = 5):
@@ -124,7 +74,7 @@ class builder:
                 continue
             else: 
                 self.skills[skill] = skill_set[0:max_list]
-        logger.info(self.skills)
+        logger.info('Skillset: %s', self.skills)
         return self.skills
     
     def build_resume(self,
@@ -160,6 +110,12 @@ class builder:
             font = font)
         template.output(output)
         logger.info('Resume made')
+
+    def _format_experience_date_ranges(self, item):
+        date_format = '%B %Y'
+        start_str = item.start.dt.strftime(date_format)
+        end_str = item.end.dt.strftime(date_format).fillna('Present')
+        return start_str + ' - ' + end_str
 
 
 def builder_from_csv(fjobs, fskills, basic_info):
