@@ -21,7 +21,7 @@ import sys
 my_parser = argparse.ArgumentParser(description='Resume Generator based off Key')
 my_parser.add_argument('--input', '-i', nargs='*', action='store', type=str, required=False, 
                         default='./data/data.yaml', help='Input data file(s), either CSV files or a YAML file')
-my_parser.add_argument('--fname', '-f', action='store', type=str, required=True, help='Output file name')
+my_parser.add_argument('--output', '-o', action='store', type=str, required=True, help='Output file name')
 my_parser.add_argument('--key', '-k', action='store', nargs='+', type=str, required=True, help='Skill keys to filter for')
 my_parser.add_argument('--max_experience', '-me', type= int, required=False, default=7, help='Maximum experience')
 my_parser.add_argument('--max_skills', '-ms', type =int, required=False, default=7, help='Maximum skills shown in tab')
@@ -38,7 +38,7 @@ input = args['input']
 me = args['max_experience']
 ms = args['max_skills']
 dps = args['display_project_skills']
-fname = args['fname']
+output = args['output']
 key = args['key']
 header_font_size = args['header_font_size']
 body_font_size = args['body_font_size']
@@ -54,16 +54,16 @@ logger.info('Input file(s): %s', input)
 logger.info('Max experience: %s', me)
 logger.info('Max skills: %s', ms)
 logger.info('Display project skills: %s', dps)
-logger.info('Output file: %s', fname)
+logger.info('Output file: %s', output)
 logger.info('Skill keys: %s', key)
 logger.info('Header font size: %s', header_font_size)
 logger.info('Body font size: %s', body_font_size)
 logger.info('Title font size: %s', title_font_size)
 
 # Append default extension
-if not fname.endswith('.pdf'):
-   fname = fname + '.pdf'
-   logger.debug('Updated output filename with ext: %s', fname)
+if not output.endswith('.pdf'):
+   output = output + '.pdf'
+   logger.debug('Updated output filename with ext: %s', output)
 
 # Create resume
 resume = None
@@ -87,7 +87,7 @@ else:
          logger.error('Expecting either basic_info.csv, experience.csv, or skills.csv, got %s', file)
          sys.exit(1)
    resume = builder_from_csv(job_csv, skills_csv, basic_csv)
-resume.build_resume(template, key, fname,
+resume.build_resume(template, key, output,
    max_experience=me, 
    max_skills=ms, 
    display_project_skills=dps, 
