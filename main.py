@@ -25,7 +25,7 @@ my_parser.add_argument('--output', '-o', action='store', type=str, required=True
 my_parser.add_argument('--key', '-k', action='store', nargs='+', type=str, required=True, help='Skill keys to filter for')
 my_parser.add_argument('--max_experience', '-me', type= int, required=False, default=7, help='Maximum experience')
 my_parser.add_argument('--max_skills', '-ms', type =int, required=False, default=7, help='Maximum skills shown in tab')
-my_parser.add_argument('--display_project_skills', '-dps', type=Boolean, required=False, default=False, help='Show skills in job section')
+my_parser.add_argument('--display_project_skills', '-dps', action='store_true', help='Show skills in job section')
 my_parser.add_argument('--header_font_size', '-hs', type=float, required=False, default=12, help='Set header font size')
 my_parser.add_argument('--body_font_size', '-bs', type=float, required=False, default=10.5, help='Set body font size')
 my_parser.add_argument('--title_font_size', '-ts', type=float, required=False, default=20, help='Set title font size')
