@@ -11,6 +11,9 @@ class builder:
     My plan is to make this class inheritable for difference types of inputs. 
     """
     def __init__(self, name, subheader_info, education, skills, jobs):
+        """
+        Initialize builder
+        """
         self.name = name
         self.subheader_info = subheader_info
         self.education = education
@@ -31,6 +34,9 @@ class builder:
         logger.info('  jobs:\n%s', self.jobs)
 
     def build_experience(self, tags, max_list = 5, display_project_skills = False):
+        """
+        Build truncated list of work experience and project experience
+        """
         logger.info('Build experience')
         filtered_jobs = self.jobs[self.jobs.tags.apply(lambda x: any(k in x for k in tags))]
         logger.debug('After filtered tags: \n%s', filtered_jobs)
@@ -61,6 +67,9 @@ class builder:
         return experience
         
     def build_skills(self, max_list = 5):
+        """
+        Build truncated lists of skills
+        """
         logger.info('Build skills')
         trunc_skills = { group:skills[:max_list] for group, skills, in self.skills.items() }
         logger.info('Truncated skills: %s', trunc_skills)
@@ -77,14 +86,17 @@ class builder:
             body_font_size = 10.5,
             title_font_size = 20,
             font = 'Helvetica'):
+        """
+        Build resume from template
+        """
         name = self.name
         address = self.subheader_info
         education = self.education
         experience = self.build_experience(
             tags = keys,
             max_list = max_experience,
-            display_project_skills = display_project_skills) 
-        skills = self.build_skills(max_list=max_skills)
+            display_project_skills = display_project_skills)
+        skills = self.build_skills(max_list = max_skills)
         logger.info('Fill template')
         template.fill_resume(
             name,
@@ -101,6 +113,10 @@ class builder:
         logger.info('Resume made')
 
     def _format_experience_date_ranges(self, item):
+        """
+        Work experience and project experience date range formatting
+        (e.g. June 2020 - Present, April 2018 - August 2018)
+        """
         date_format = '%B %Y'
         start_str = item.start.dt.strftime(date_format)
         end_str = item.end.dt.strftime(date_format).fillna('Present')
@@ -108,6 +124,9 @@ class builder:
 
 
 def builder_from_yaml(fname):
+    """
+    Generate builder from YAML file
+    """
     with open (fname, 'r') as f:
         data = yaml.safe_load(f)
     skills = data['skills']
@@ -123,6 +142,9 @@ def builder_from_yaml(fname):
 
 
 def builder_from_csv(fjobs, fskills, basic_info):
+    """
+    Generate builder from csv files
+    """
     jobs = pd.read_csv(fjobs)
     jobs.tags = jobs.tags.apply(lambda x: x.split(', '))
     jobs.detail = jobs.detail.apply(lambda x: x.split(', '))

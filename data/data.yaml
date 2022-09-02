@@ -41,8 +41,8 @@ experience:
     skills: Pytorch, Deep Learning, AWS
     start: 3/1/2022
     end: 6/1/2022
-    company: None
-    location: None 
+    company:
+    location: 
     detail:
       - Built deep learning models to predict engagingness of dialog responses based on reddit data
       - Implemented CNN and LSTM architecture and achieved comparable score with literature
@@ -77,8 +77,8 @@ experience:
     skills: Python, Machine Learning
     start: 3/1/2022
     end: 6/1/2022
-    company: None
-    location: None
+    company:
+    location:
     detail:
       - Used binary classification techniques to predict how vulnerable a household is
       - Implemented logistic regression and Naive Bayes algorithms from scratch
@@ -97,8 +97,8 @@ experience:
     skills: MATLAB, Image Processing
     start: 9/1/2020
     end: 4/1/2021
-    company: None
-    location: None
+    company:
+    location:
     detail:
       - Optimized thresholds for phase contrast algorithm leading to more accurate cell tracking scores
       - Worked with large datasets containing cell images 
@@ -134,8 +134,8 @@ experience:
     skills: Python, scikit-learn, Natural Language Processing
     start: 7/1/2022
     end:
-    company: None
-    location: None
+    company:
+    location:
     detail:
       - Developed an interactive FAQ bot to respond to commonly asked interview questions
       - Built a database that consists of over 100 interview questions
@@ -152,8 +152,8 @@ experience:
     skills: React, Gatsby, Web Development
     start: 7/1/2022
     end:
-    company: None
-    location: None
+    company:
+    location:
     detail:
       - Designed and created a personal site from scratch to as a means to learn React and showcase personal projects
       - Built using Gatsby as a static site generator that is now hosted on GitHub
@@ -169,8 +169,8 @@ experience:
     skills: Python, Object Oriented Programming, Database, Yaml
     start: 7/1/2022
     end: 8/1/2022
-    company: None
-    location: None
+    company:
+    location:
     detail:
       - Developed a resume building application that can build different resumes that depend on purpose
       - Created multiple databases to organize and pull relevant job information
