@@ -154,20 +154,12 @@ def builder_from_csv(fjobs, fskills, basic_info):
     jobs['type'] = jobs['type'].apply(lambda x: x.upper())
     basic = pd.read_csv(basic_info)
     basic.edu_1 = basic.edu_1.apply(lambda x:str(x).split('/ '))
-    basic.edu_2 = basic.edu_2.apply(lambda x:str(x).split('/ '))
     education = {
-        basic.edu_1.item()[0] : 
+        basic.edu_1.item()[0]: 
         {
             'address':basic.edu_1.item()[1], 
             'completed': basic.edu_1.item()[2],
             'GPA': basic.edu_1.item()[3]
-
-        },
-        basic.edu_2.item()[0] : 
-        {
-            'address': basic.edu_2.item()[1],
-            'completed': basic.edu_2.item()[2],
-            'GPA': basic.edu_2.item()[3]
         }
     }
     address = basic.address.item()

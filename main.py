@@ -10,22 +10,21 @@ Arguments:
    - file name
    - keys
 """
-from xmlrpc.client import Boolean
 from resume_builder.builder import *
 from resume_builder.templates import *
+import os
 import argparse
 import logging
 import sys
 
 # Argument parser
 my_parser = argparse.ArgumentParser(description='Generate a resume. Filter experience based on input tags')
-my_parser.add_argument('--tags', '-t', metavar='TAG', action='store', nargs='+', type=str, 
-                        required=True, help='Tags to filter for')
-my_parser.add_argument('--input', '-i', nargs='*', action='store', type=str, required=False, 
-                        default='./data/data.yaml', help='Input data file(s), either CSV files or a YAML file')
+my_parser.add_argument('--tags', '-t', metavar='TAG', action='store', nargs='+', type=str, required=True, help='Tags to filter for')
+my_parser.add_argument('--input', '-i', action='store', type=str, required=False, default='./data/data.yaml', 
+                        help='Input data file/directory, either a YAML file or directory of csv files')
 my_parser.add_argument('--output', '-o', action='store', type=str, required=True, help='Output file name')
-my_parser.add_argument('--max-experience', '-me', type= int, required=False, default=7, help='Maximum experience')
-my_parser.add_argument('--max-skills', '-ms', type =int, required=False, default=7, help='Maximum skills shown in tab')
+my_parser.add_argument('--max-experience', '-me', type=int, required=False, default=7, help='Maximum experience')
+my_parser.add_argument('--max-skills', '-ms', type=int, required=False, default=7, help='Maximum skills shown in skill section')
 my_parser.add_argument('--display-project-skills', '-dps', action='store_true', help='Show skills in job section')
 my_parser.add_argument('--header-font-size', '-hs', type=float, required=False, default=12, help='Set header font size')
 my_parser.add_argument('--body-font-size', '-bs', type=float, required=False, default=10.5, help='Set body font size')
@@ -61,33 +60,30 @@ logger.info('Header font size: %s', header_font_size)
 logger.info('Body font size: %s', body_font_size)
 logger.info('Title font size: %s', title_font_size)
 
-# Append default extension
+# Append default extension for output file
 if not output.endswith('.pdf'):
    output = output + '.pdf'
    logger.debug('Updated output filename with ext: %s', output)
 
-# Create resume
-resume = None
-if len(input) == 1:
-   input = input[0]
-   if input.endswith('.yaml'):
-      resume = builder_from_yaml(input)
-   else: 
-      logger.error('Expecting a .yaml file, got %s', input)
+# Parse input file/directory into resume
+if input.endswith('.yaml'):
+   resume = builder_from_yaml(input)
+elif os.path.isdir(input):
+   basic_info = 'basic_info.csv'
+   experience = 'experience.csv'
+   skills = 'skills.csv'
+   csv_files = [basic_info, experience, skills]
+   list_csv_dir = os.listdir(input)
+   remaining = [file for file in csv_files if file not in list_csv_dir]
+   if remaining:
+      logger.error('Missing csv data files in directory %s: %s', input, remaining)
       sys.exit(1)
+   resume = builder_from_csv(f'{input}/{experience}', f'{input}/{skills}', f'{input}/{basic_info}')
 else:
-   for file in input:
-      check = 0
-      if 'basic_info.csv' in file:
-         basic_csv = file
-      elif 'experience.csv' in file:
-         job_csv = file
-      elif 'skills.csv' in file:
-         skills_csv = file 
-      else:
-         logger.error('Expecting either basic_info.csv, experience.csv, or skills.csv, got %s', file)
-         sys.exit(1)
-   resume = builder_from_csv(job_csv, skills_csv, basic_csv)
+   logger.error('Input not a directory or .yaml file: %s', input)
+   sys.exit(1)
+
+# Build resume
 resume.build_resume(template, tags, output,
    max_experience=max_experience, 
    max_skills=max_skills, 
