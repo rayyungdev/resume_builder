@@ -18,11 +18,12 @@ import logging
 import sys
 
 # Argument parser
-my_parser = argparse.ArgumentParser(description='Resume Generator based off Key')
+my_parser = argparse.ArgumentParser(description='Generate a resume. Filter experience based on input tags')
+my_parser.add_argument('--tags', '-t', metavar='TAG', action='store', nargs='+', type=str, 
+                        required=True, help='Tags to filter for')
 my_parser.add_argument('--input', '-i', nargs='*', action='store', type=str, required=False, 
                         default='./data/data.yaml', help='Input data file(s), either CSV files or a YAML file')
 my_parser.add_argument('--output', '-o', action='store', type=str, required=True, help='Output file name')
-my_parser.add_argument('--key', '-k', action='store', nargs='+', type=str, required=True, help='Skill keys to filter for')
 my_parser.add_argument('--max-experience', '-me', type= int, required=False, default=7, help='Maximum experience')
 my_parser.add_argument('--max-skills', '-ms', type =int, required=False, default=7, help='Maximum skills shown in tab')
 my_parser.add_argument('--display-project-skills', '-dps', action='store_true', help='Show skills in job section')
@@ -34,12 +35,12 @@ my_parser.add_argument('--debug', '-d', action='store_true', help='Print debug l
 # Parsed args
 args = vars(my_parser.parse_args())
 template = template_basic()
+tags = args['tags']
 input = args['input']
-me = args['max_experience']
-ms = args['max_skills']
-dps = args['display_project_skills']
 output = args['output']
-key = args['key']
+max_experience = args['max_experience']
+max_skills = args['max_skills']
+display_project_skills = args['display_project_skills']
 header_font_size = args['header_font_size']
 body_font_size = args['body_font_size']
 title_font_size = args['title_font_size']
@@ -51,11 +52,11 @@ logger = logging.getLogger('main')
 
 # Log input variables
 logger.info('Input file(s): %s', input)
-logger.info('Max experience: %s', me)
-logger.info('Max skills: %s', ms)
-logger.info('Display project skills: %s', dps)
+logger.info('Max experience: %s', max_experience)
+logger.info('Max skills: %s', max_skills)
+logger.info('Display project skills: %s', display_project_skills)
 logger.info('Output file: %s', output)
-logger.info('Skill keys: %s', key)
+logger.info('Skill tags: %s', tags)
 logger.info('Header font size: %s', header_font_size)
 logger.info('Body font size: %s', body_font_size)
 logger.info('Title font size: %s', title_font_size)
@@ -87,10 +88,10 @@ else:
          logger.error('Expecting either basic_info.csv, experience.csv, or skills.csv, got %s', file)
          sys.exit(1)
    resume = builder_from_csv(job_csv, skills_csv, basic_csv)
-resume.build_resume(template, key, output,
-   max_experience=me, 
-   max_skills=ms, 
-   display_project_skills=dps, 
+resume.build_resume(template, tags, output,
+   max_experience=max_experience, 
+   max_skills=max_skills, 
+   display_project_skills=display_project_skills, 
    header_font_size=header_font_size, 
    body_font_size=body_font_size, 
    title_font_size=title_font_size)
