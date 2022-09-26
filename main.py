@@ -10,36 +10,36 @@ Arguments:
    - file name
    - keys
 """
-from xmlrpc.client import Boolean
 from resume_builder.builder import *
 from resume_builder.templates import *
+import os
 import argparse
 import logging
 import sys
 
 # Argument parser
-my_parser = argparse.ArgumentParser(description='Resume Generator based off Key')
-my_parser.add_argument('--input', '-i', nargs='*', action='store', type=str, required=False, 
-                        default=['./data/data.yaml'], help='Input data file(s), either CSV files or a YAML file')
-my_parser.add_argument('--fname', '-f', action='store', type=str, required=True, help='Output file name')
-my_parser.add_argument('--key', '-k', action='store', nargs='+', type=str, required=True, help='Skill keys to filter for')
-my_parser.add_argument('--max_experience', '-me', type= int, required=False, default=7, help='Maximum experience')
-my_parser.add_argument('--max_skills', '-ms', type =int, required=False, default=7, help='Maximum skills shown in tab')
-my_parser.add_argument('--display_project_skills', '-dps', type=Boolean, required=False, default=False, help='Show skills in job section')
-my_parser.add_argument('--header_font_size', '-hs', type=float, required=False, default=12, help='Set header font size')
-my_parser.add_argument('--body_font_size', '-bs', type=float, required=False, default=10.5, help='Set body font size')
-my_parser.add_argument('--title_font_size', '-ts', type=float, required=False, default=20, help='Set title font size')
+my_parser = argparse.ArgumentParser(description='Generate a resume. Filter experience based on input tags')
+my_parser.add_argument('--tags', '-t', metavar='TAG', action='store', nargs='+', type=str, required=True, help='Tags to filter for')
+my_parser.add_argument('--input', '-i', action='store', type=str, required=False, default='./data/data.yaml', 
+                        help='Input data file/directory, either a YAML file or directory of csv files')
+my_parser.add_argument('--output', '-o', action='store', type=str, required=True, help='Output file name')
+my_parser.add_argument('--max-experience', '-me', type=int, required=False, default=7, help='Maximum experience')
+my_parser.add_argument('--max-skills', '-ms', type=int, required=False, default=7, help='Maximum skills shown in skill section')
+my_parser.add_argument('--display-project-skills', '-dps', action='store_true', help='Show skills in job section')
+my_parser.add_argument('--header-font-size', '-hs', type=float, required=False, default=12, help='Set header font size')
+my_parser.add_argument('--body-font-size', '-bs', type=float, required=False, default=10.5, help='Set body font size')
+my_parser.add_argument('--title-font-size', '-ts', type=float, required=False, default=20, help='Set title font size')
 my_parser.add_argument('--debug', '-d', action='store_true', help='Print debug logging')
 
 # Parsed args
 args = vars(my_parser.parse_args())
 template = template_basic()
+tags = args['tags']
 input = args['input']
-me = args['max_experience']
-ms = args['max_skills']
-dps = args['display_project_skills']
-fname = args['fname']
-key = args['key']
+output = args['output']
+max_experience = args['max_experience']
+max_skills = args['max_skills']
+display_project_skills = args['display_project_skills']
 header_font_size = args['header_font_size']
 body_font_size = args['body_font_size']
 title_font_size = args['title_font_size']
@@ -51,46 +51,43 @@ logger = logging.getLogger('main')
 
 # Log input variables
 logger.info('Input file(s): %s', input)
-logger.info('Max experience: %s', me)
-logger.info('Max skills: %s', ms)
-logger.info('Display project skills: %s', dps)
-logger.info('Output file: %s', fname)
-logger.info('Skill keys: %s', key)
+logger.info('Max experience: %s', max_experience)
+logger.info('Max skills: %s', max_skills)
+logger.info('Display project skills: %s', display_project_skills)
+logger.info('Output file: %s', output)
+logger.info('Skill tags: %s', tags)
 logger.info('Header font size: %s', header_font_size)
 logger.info('Body font size: %s', body_font_size)
 logger.info('Title font size: %s', title_font_size)
 
-# Append default extension
-if not fname.endswith('.pdf'):
-   fname = fname + '.pdf'
-   logger.debug('Updated output filename with ext: %s', fname)
+# Append default extension for output file
+if not output.endswith('.pdf'):
+   output = output + '.pdf'
+   logger.debug('Updated output filename with ext: %s', output)
 
-# Create resume
-resume = None
-if len(input) == 1:
-   input = input[0]
-   if input.endswith('.yaml'):
-      resume = yaml_builder(input)
-   else: 
-      logger.error('Expecting a .yaml file, got %s', input)
+# Parse input file/directory into resume
+if input.endswith('.yaml'):
+   resume = builder_from_yaml(input)
+elif os.path.isdir(input):
+   basic_info = 'basic_info.csv'
+   experience = 'experience.csv'
+   skills = 'skills.csv'
+   csv_files = [basic_info, experience, skills]
+   list_csv_dir = os.listdir(input)
+   remaining = [file for file in csv_files if file not in list_csv_dir]
+   if remaining:
+      logger.error('Missing csv data files in directory %s: %s', input, remaining)
       sys.exit(1)
+   resume = builder_from_csv(f'{input}/{experience}', f'{input}/{skills}', f'{input}/{basic_info}')
 else:
-   for file in input:
-      check = 0
-      if 'basic_info.csv' in file:
-         basic_csv = file
-      elif 'experience.csv' in file:
-         job_csv = file
-      elif 'skills.csv' in file:
-         skills_csv = file 
-      else:
-         logger.error('Expecting either basic_info.csv, experience.csv, or skills.csv, got %s', file)
-         sys.exit(1)
-   resume = csv_builder(job_csv, skills_csv, basic_csv)
-resume.build_resume(template, key, fname,
-   max_experience=me, 
-   max_skills=ms, 
-   display_project_skills=dps, 
+   logger.error('Input not a directory or .yaml file: %s', input)
+   sys.exit(1)
+
+# Build resume
+resume.build_resume(template, tags, output,
+   max_experience=max_experience, 
+   max_skills=max_skills, 
+   display_project_skills=display_project_skills, 
    header_font_size=header_font_size, 
    body_font_size=body_font_size, 
    title_font_size=title_font_size)

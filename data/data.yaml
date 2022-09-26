@@ -1,13 +1,10 @@
 ---
-# Basic Info
-name : Raymond Yung
-education : {
-  'Masters of Science in Electrical Engineering' : 
-    {
-      'address': 'Drexel University, Philadelphia PA',
-      'completed': 'Completed June 2022',
-      'GPA': 'GPA: 3.68'
-    }, 
+name: Raymond Yung
+education:
+  'Masters of Science in Electrical Engineering':
+    address: Drexel University, Philadelphia PA
+    completed: Completed June 2022
+    GPA: 'GPA: 3.68'
   'Bachelors of Science in Electrical Engineering':
     {
       'address': 'Drexel University, Philadelphia PA',
