@@ -109,8 +109,8 @@ class builder:
             body_font_size = body_font_size,
             title_font_size = title_font_size,
             font = font)
-        template.output(output)
         logger.info('Resume made')
+        return template.output(output)
 
     def _format_experience_date_ranges(self, item):
         """
